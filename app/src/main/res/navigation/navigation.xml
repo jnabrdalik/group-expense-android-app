@@ -7,19 +7,26 @@
 
     <fragment
         android:id="@+id/groupListFragment"
-        android:name="com.example.groupexpenseapp.ui.GroupListFragment"
+        android:name="com.example.groupexpenseapp.ui.fragment.GroupListFragment"
         android:label="GroupListFragment" >
         <action
             android:id="@+id/action_groupListFragment_to_groupFragment"
             app:destination="@id/groupFragment" />
+        <action
+            android:id="@+id/action_groupListFragment_to_createGroupFragment"
+            app:destination="@id/createGroupFragment" />
     </fragment>
     <fragment
         android:id="@+id/groupFragment"
-        android:name="com.example.groupexpenseapp.ui.GroupFragment"
+        android:name="com.example.groupexpenseapp.ui.fragment.GroupFragment"
         android:label="group_fragment"
         tools:layout="@layout/group_fragment" >
         <argument
             android:name="groupId"
-            app:argType="integer" />
+            app:argType="long" />
     </fragment>
+    <fragment
+        android:id="@+id/createGroupFragment"
+        android:name="com.example.groupexpenseapp.ui.fragment.CreateGroupFragment"
+        android:label="CreateGroupFragment" />
 </navigation>

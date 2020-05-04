@@ -1,20 +1,25 @@
 package com.example.groupexpenseapp.db.entity;
 
-import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import org.threeten.bp.OffsetDateTime;
+import org.threeten.bp.format.DateTimeFormatter;
+
 @Entity(tableName = "groups")
 public class Group {
+    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+
     @PrimaryKey(autoGenerate = true)
     private int id;
-    @NonNull
     private String name;
-    private String description;
+    @ColumnInfo(name = "time_created")
+    private OffsetDateTime timeCreated;
 
-    public Group(String name, String description) {
+    public Group(String name, OffsetDateTime timeCreated) {
         this.name = name;
-        this.description = description;
+        this.timeCreated = timeCreated;
     }
 
     public int getId() {
@@ -25,11 +30,17 @@ public class Group {
         return name;
     }
 
-    public String getDescription() {
-        return description;
+    public OffsetDateTime getTimeCreated() {
+        return timeCreated;
     }
 
     public void setId(int id) {
         this.id = id;
     }
+
+
+    public String getFormattedDateTime() {
+        return timeCreated.format(formatter);
+    }
+
 }

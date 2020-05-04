@@ -12,14 +12,5 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-//        if (savedInstanceState == null) {
-//            GroupListFragment fragment = new GroupListFragment();
-//
-//            getSupportFragmentManager()
-//                    .beginTransaction()
-//                    .add(R.id.fragment_container, fragment, GroupListFragment.TAG)
-//                    .commit();
-//        }
     }
 }

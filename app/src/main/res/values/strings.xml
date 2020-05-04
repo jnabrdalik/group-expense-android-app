@@ -1,6 +1,13 @@
 <resources>
-    <string name="app_name">GroupExpenseApp</string>
+    <string name="app_name">Wydatki grupowe</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="group_name">Nazwa grupy</string>
+    <string name="group_descr">Opis</string>
+    <string name="payer_paid">%s zapłacił(a)</string>
+    <string name="person_count">%d osób w grupie</string>
+    <string name="total_spent">Łącznie wydano %.2f</string>
+    <string name="group_created">Utworzono: %s</string>
+    <string name="money_format">%.2f zł</string>
 </resources>

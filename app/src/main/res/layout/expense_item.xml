@@ -1,0 +1,55 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="expenseAndPayer"
+            type="com.example.groupexpenseapp.db.entity.ExpenseAndPayer" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/expense_descr"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:text="@{expenseAndPayer.expense.description}"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/payer_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="14sp"
+                android:textColor="#757575"
+                android:padding="1dp"
+                android:text="@{@string/payer_paid(expenseAndPayer.payer.name)}" />
+            <TextView
+                android:id="@+id/expense_amount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:padding="3dp"
+                android:textAlignment="textEnd"
+                android:textSize="18sp"
+                android:text="@{@string/money_format(expenseAndPayer.expense.amount)}" />
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</layout>

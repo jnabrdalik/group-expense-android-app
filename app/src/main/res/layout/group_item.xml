@@ -1,40 +1,72 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <data>
-        <variable name="group"
-            type="com.example.groupexpenseapp.db.entity.Group"/>
+
         <variable
-            name="callback"
-            type="com.example.groupexpenseapp.ui.GroupClickCallback" />
+            name="group"
+            type="com.example.groupexpenseapp.db.entity.Group" />
+
+        <variable
+            name="expenseSum"
+            type="Double" />
+
+        <variable
+            name="personCount"
+            type="Integer" />
+
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
     </data>
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/group_card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="@dimen/product_item_min_height"
+        android:layout_marginBottom="1dp"
+        android:onClick="@{clickListener}"
         android:orientation="horizontal"
-        android:layout_marginStart="@dimen/item_horizontal_margin"
-        android:layout_marginEnd="@dimen/item_horizontal_margin"
-        app:cardUseCompatPadding="true">
+        app:cardBackgroundColor="@color/cardview_light_background"
+        app:cardCornerRadius="3dp"
+        app:cardElevation="4dp"
+        app:cardUseCompatPadding="true"
+        app:contentPadding="8dp">
 
-        <RelativeLayout
-            android:layout_marginStart="@dimen/item_horizontal_margin"
-            android:layout_marginEnd="@dimen/item_horizontal_margin"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <TextView
-                android:id="@+id/name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{group.name}"/>
-
-            <TextView
+                android:id="@+id/group_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/name"
-                android:text="@{group.description}"/>
-        </RelativeLayout>
+                android:padding="2dp"
+                android:text="@{group.name}"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/group_person_count"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="2dp"
+                android:textSize="18dp"
+                android:text="@{@string/person_count(personCount)}" />
+            <TextView
+                android:id="@+id/group_expense_sum"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="2dp"
+                android:text="@{@string/total_spent(expenseSum)}" />
+            <TextView
+                android:id="@+id/group_creation_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="2dp"
+                android:text="@{@string/group_created(group.formattedDateTime)}" />
+        </LinearLayout>
+
 
     </androidx.cardview.widget.CardView>
 </layout>
