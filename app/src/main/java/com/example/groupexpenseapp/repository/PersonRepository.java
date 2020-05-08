@@ -26,8 +26,10 @@ public class PersonRepository {
     }
 
     private PersonDao personDao;
-    private LiveData<List<Person>> groupPersons;
+    private LiveData<List<Person>> groupPeople;
+    private LiveData<List<Person>> peopleInvolvedInExpense;
     private long currentGroupId;
+    private long currentExpenseId;
 
     private PersonRepository(Application application) {
         AppDatabase database = AppDatabase.getInstance(application);
@@ -36,10 +38,18 @@ public class PersonRepository {
 
     public LiveData<List<Person>> getGroupPersons(long groupId) {
         if (currentGroupId == groupId)
-            return groupPersons;
+            return groupPeople;
 
         this.currentGroupId = groupId;
-        this.groupPersons = personDao.getPeopleFromGroup(groupId);
-        return groupPersons;
+        this.groupPeople = personDao.getPeopleFromGroup(groupId);
+        return groupPeople;
     }
+
+//    public LiveData<List<Person>> getPeopleInvolvedInExpense(long expenseId) {
+//        if (currentExpenseId == expenseId)
+//            return peopleInvolvedInExpense;
+//
+//        this.currentExpenseId = expenseId;
+//        //this.peopleInvolvedInExpense = personDao.get
+//    }
 }

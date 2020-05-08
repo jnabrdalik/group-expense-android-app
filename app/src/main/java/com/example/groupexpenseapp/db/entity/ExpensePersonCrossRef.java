@@ -4,18 +4,22 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 
-@Entity(primaryKeys = {"expense_id", "person_id"})
+@Entity(primaryKeys = {"expense_id", "person_id"},
+        tableName = "expenses_people",
+        foreignKeys = {
+                @ForeignKey(entity = Expense.class,
+                        parentColumns = "id",
+                        childColumns = "expense_id",
+                        onDelete = ForeignKey.CASCADE),
+                @ForeignKey(entity = Person.class,
+                        parentColumns = "id",
+                        childColumns = "person_id")
+        })
 public class ExpensePersonCrossRef {
-    @ForeignKey(entity = Expense.class,
-                parentColumns = "id",
-                childColumns = "expense_id",
-                onDelete = ForeignKey.CASCADE)
+
     @ColumnInfo(name = "expense_id")
     private int expenseId;
 
-    @ForeignKey(entity = Expense.class,
-                parentColumns = "id",
-                childColumns = "expense_id")
     @ColumnInfo(name = "person_id")
     private int personId;
 

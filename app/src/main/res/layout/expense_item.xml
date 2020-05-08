@@ -6,12 +6,17 @@
         <variable
             name="expenseAndPayer"
             type="com.example.groupexpenseapp.db.entity.ExpenseAndPayer" />
+
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
     </data>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:onClick="@{clickListener}">
 
         <TextView
             android:id="@+id/expense_descr"

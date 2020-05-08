@@ -7,7 +7,16 @@ import androidx.room.PrimaryKey;
 
 import org.threeten.bp.OffsetDateTime;
 
-@Entity(tableName = "expenses")
+@Entity(tableName = "expenses",
+        foreignKeys = {
+                @ForeignKey(entity = Group.class,
+                            parentColumns = "id",
+                            childColumns = "group_id",
+                            onDelete = ForeignKey.CASCADE),
+                @ForeignKey(entity = Person.class,
+                            parentColumns = "id",
+                            childColumns = "payer_id")
+        })
 public class Expense {
     @PrimaryKey(autoGenerate = true)
     private int id;
@@ -17,16 +26,9 @@ public class Expense {
     @ColumnInfo(name = "time_added")
     private OffsetDateTime timeAdded;
 
-    @ForeignKey(entity = Group.class,
-                parentColumns = "id",
-                childColumns = "group_id",
-                onDelete = ForeignKey.CASCADE)
     @ColumnInfo(name = "group_id")
     private int groupId;
 
-    @ForeignKey(entity = Person.class,
-                parentColumns = "id",
-                childColumns = "payer_id")
     @ColumnInfo(name = "payer_id")
     private int payerId;
 

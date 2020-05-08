@@ -6,7 +6,9 @@ import androidx.room.Relation;
 public class ExpenseAndPayer {
     @Embedded
     private Expense expense;
-    @Relation(parentColumn = "payer_id", entityColumn = "id")
+    @Relation(
+            parentColumn = "payer_id",
+            entityColumn = "id")
     private Person payer;
 
     public ExpenseAndPayer(Expense expense, Person payer) {

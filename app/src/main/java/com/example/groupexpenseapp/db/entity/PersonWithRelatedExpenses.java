@@ -11,21 +11,36 @@ public class PersonWithRelatedExpenses {
     private Person person;
 
     @Relation(
-            parentColumn = "person_id",
-            entityColumn = "expense_id",
-            associateBy = @Junction(ExpensePersonCrossRef.class))
-    private List<Expense> relatedExpenses;
+            parentColumn = "id",
+            entityColumn = "payer_id")
+    private List<Expense> expensesPaidFor;
 
-    public PersonWithRelatedExpenses(Person person, List<Expense> relatedExpenses) {
+    @Relation(
+            parentColumn = "id",
+            entity = Expense.class,
+            entityColumn = "id",
+            associateBy = @Junction(
+                    value = ExpensePersonCrossRef.class,
+                    parentColumn = "person_id",
+                    entityColumn = "expense_id"))
+    private List<Expense> expensesWhereOwes;
+
+    public PersonWithRelatedExpenses(Person person, List<Expense> expensesPaidFor, List<Expense> expensesWhereOwes) {
         this.person = person;
-        this.relatedExpenses = relatedExpenses;
+        this.expensesPaidFor = expensesPaidFor;
+        this.expensesWhereOwes = expensesWhereOwes;
     }
 
     public Person getPerson() {
         return person;
     }
 
-    public List<Expense> getRelatedExpenses() {
-        return relatedExpenses;
+    public List<Expense> getExpensesPaidFor() {
+        return expensesPaidFor;
     }
+
+    public List<Expense> getExpensesWhereOwes() {
+        return expensesWhereOwes;
+    }
+
 }

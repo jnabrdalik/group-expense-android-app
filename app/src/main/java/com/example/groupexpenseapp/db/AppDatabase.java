@@ -2,6 +2,7 @@ package com.example.groupexpenseapp.db;
 
 
 import android.content.Context;
+import android.provider.ContactsContract;
 
 import androidx.annotation.NonNull;
 import androidx.room.Database;
@@ -18,10 +19,12 @@ import com.example.groupexpenseapp.db.entity.*;
 
 import org.threeten.bp.OffsetDateTime;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Group.class, Expense.class, Person.class}, version = 1, exportSchema = false)
+@Database(entities = {Group.class, Expense.class, Person.class, ExpensePersonCrossRef.class}, version = 1, exportSchema = true)
 @TypeConverters({DateConverter.class})
 public abstract class AppDatabase extends RoomDatabase {
     private static final String DB_NAME = "group-expense-app-db";
@@ -58,21 +61,31 @@ public abstract class AppDatabase extends RoomDatabase {
                 groupDao.deleteAll();
                 personDao.deleteAll();
 
-                for (int i = 0; i < 10; i++) {
-                    Group group = new Group("Nazwa grupy " + (i+1), OffsetDateTime.now());
-                    long groupId = groupDao.insert(group);
+                for (String groupName : DataGenerator.getGroupNames()) {
+                    Group group = new Group(groupName, DataGenerator.getRandomDateTime());
+                    int groupId = (int) groupDao.insert(group);
 
+                    ArrayList<Integer> peopleIds = new ArrayList<>();
+                    for (String personName : DataGenerator.getRandomNames()) {
+                        Person person = new Person(personName, groupId);
+                        int personId = (int) personDao.insert(person);
+                        peopleIds.add(personId);
+                    }
 
-                    for (int j = 0; j < 15; j++) {
-                        Person person = new Person("Osoba nr " + (j+1), (int) groupId);
-                        long personId = personDao.insertPerson(person);
+                    for (String expenseDescription : DataGenerator.getRandomExpenseDescriptions()) {
+                        Expense expense = new Expense(
+                                DataGenerator.getRandomAmount(),
+                                expenseDescription,
+                                DataGenerator.getRandomDateTime(),
+                                groupId,
+                                DataGenerator.selectRandomId(peopleIds));
+                        int expenseId = (int) expenseDao.insert(expense);
 
-                        double amount = Math.random() * 1000;
-                        Expense expense = new Expense(amount, "Wydatek nr " + j, OffsetDateTime.now(), (int) groupId, (int) personId);
-                        expenseDao.insertExpense(expense);
+                        List<Integer> owingPeople = DataGenerator.selectRandomIds(peopleIds);
+                        for (int personId : owingPeople)
+                            expenseDao.insertPersonOwing(expenseId, personId);
                     }
                 }
-
             });
         }
     };

@@ -18,7 +18,7 @@ public class ExpenseListViewModel extends AndroidViewModel {
         super(application);
 
         ExpenseRepository repository = ExpenseRepository.getInstance(application);
-        groupExpenses = repository.getExpenseAndPayer(groupId);
+        groupExpenses = repository.getExpensesAndPayers(groupId);
     }
 
     public LiveData<List<ExpenseAndPayer>> getGroupExpenses() {

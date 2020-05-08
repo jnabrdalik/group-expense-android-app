@@ -30,6 +30,10 @@ public class Group {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public OffsetDateTime getTimeCreated() {
         return timeCreated;
     }
@@ -38,8 +42,7 @@ public class Group {
         this.id = id;
     }
 
-
-    public String getFormattedDateTime() {
+    public String getFormattedTimeCreated() {
         return timeCreated.format(formatter);
     }
 

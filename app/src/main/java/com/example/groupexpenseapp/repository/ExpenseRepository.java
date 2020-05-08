@@ -27,7 +27,7 @@ public class ExpenseRepository {
     }
 
     private ExpenseDao expenseDao;
-    private LiveData<List<Expense>> groupExpenses;
+    private LiveData<List<ExpenseAndPayer>> groupExpenses;
     private long currentGroupId;
 
     private ExpenseRepository(Application application) {
@@ -35,18 +35,14 @@ public class ExpenseRepository {
         expenseDao = database.expenseDao();
     }
 
-    public LiveData<List<Expense>> getGroupExpenses(long groupId) {
+    public LiveData<List<ExpenseAndPayer>> getExpensesAndPayers(long groupId) {
         if (currentGroupId == groupId)
             return groupExpenses;
 
-        this.currentGroupId = groupId;
-        this.groupExpenses = expenseDao.getExpensesFromGroupNewestFirst(groupId);
+        currentGroupId = groupId;
+        groupExpenses = expenseDao.getExpensesAndPayersFromGroupMostExpensiveFirst(groupId);
+
         return groupExpenses;
     }
-
-    public LiveData<List<ExpenseAndPayer>> getExpenseAndPayer(long groupId) {
-        return expenseDao.getExpensesAndPayers(groupId);
-    }
-
 
 }

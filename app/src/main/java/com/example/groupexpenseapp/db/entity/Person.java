@@ -5,16 +5,18 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "persons")
+@Entity(tableName = "persons",
+        foreignKeys =
+        @ForeignKey(entity = Group.class,
+                    parentColumns = "id",
+                    childColumns = "group_id",
+                    onDelete = ForeignKey.CASCADE))
 public class Person {
     @PrimaryKey(autoGenerate = true)
     private int id;
     private String name;
 
-    @ForeignKey(entity = Group.class,
-            parentColumns = "id",
-            childColumns = "group_id",
-            onDelete = ForeignKey.CASCADE)
+
     @ColumnInfo(name = "group_id")
     private int groupId;
 

@@ -1,6 +1,7 @@
 package com.example.groupexpenseapp.ui.adapter;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -9,13 +10,12 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.groupexpenseapp.R;
-import com.example.groupexpenseapp.databinding.PersonItemBinding;
+import com.example.groupexpenseapp.databinding.PersonInvolvedItemBinding;
 import com.example.groupexpenseapp.db.entity.Person;
 import com.example.groupexpenseapp.ui.adapter.diffutil.PersonDiffUtil;
 
-
-public class PersonAdapter extends ListAdapter<Person, PersonAdapter.PersonViewHolder> {
-    public PersonAdapter() {
+public class PersonInvolvedAdapter extends ListAdapter<Person, PersonInvolvedAdapter.PersonInvolvedViewHolder> {
+    public PersonInvolvedAdapter() {
         super(new PersonDiffUtil());
 
         setHasStableIds(true);
@@ -26,30 +26,31 @@ public class PersonAdapter extends ListAdapter<Person, PersonAdapter.PersonViewH
         return getItem(position).getId();
     }
 
+
     @NonNull
     @Override
-    public PersonViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        PersonItemBinding binding = DataBindingUtil
-                .inflate(LayoutInflater.from(parent.getContext()), R.layout.person_item,
+    public PersonInvolvedViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        PersonInvolvedItemBinding binding = DataBindingUtil
+                .inflate(LayoutInflater.from(parent.getContext()), R.layout.person_involved_item,
                         parent, false);
-        return new PersonViewHolder(binding);
+
+        return new PersonInvolvedViewHolder(binding);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull PersonViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull PersonInvolvedViewHolder holder, int position) {
         Person person = getItem(position);
         holder.binding.setPerson(person);
         holder.binding.executePendingBindings();
     }
 
-    static class PersonViewHolder extends RecyclerView.ViewHolder {
-        final PersonItemBinding binding;
+    static class PersonInvolvedViewHolder extends RecyclerView.ViewHolder {
+        final PersonInvolvedItemBinding binding;
 
-        public PersonViewHolder(PersonItemBinding binding) {
+        public PersonInvolvedViewHolder(PersonInvolvedItemBinding binding) {
             super(binding.getRoot());
 
             this.binding = binding;
         }
     }
 }
-

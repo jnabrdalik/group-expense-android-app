@@ -8,7 +8,8 @@
     <fragment
         android:id="@+id/groupListFragment"
         android:name="com.example.groupexpenseapp.ui.fragment.GroupListFragment"
-        android:label="GroupListFragment" >
+        android:label="GroupListFragment"
+        tools:layout="@layout/group_list_fragment">
         <action
             android:id="@+id/action_groupListFragment_to_groupFragment"
             app:destination="@id/groupFragment" />
@@ -24,9 +25,27 @@
         <argument
             android:name="groupId"
             app:argType="long" />
+        <action
+            android:id="@+id/action_groupFragment_to_expenseDetailsFragment"
+            app:destination="@id/expenseDetailsFragment" />
+        <action
+            android:id="@+id/action_groupFragment_to_personDetailsFragment"
+            app:destination="@id/personDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/createGroupFragment"
         android:name="com.example.groupexpenseapp.ui.fragment.CreateGroupFragment"
         android:label="CreateGroupFragment" />
+    <fragment
+        android:id="@+id/expenseDetailsFragment"
+        android:name="com.example.groupexpenseapp.ui.fragment.ExpenseDetailsFragment"
+        android:label="ExpenseDetailsFragment" >
+        <argument
+            android:name="expenseId"
+            app:argType="long" />
+    </fragment>
+    <fragment
+        android:id="@+id/personDetailsFragment"
+        android:name="com.example.groupexpenseapp.ui.fragment.PersonDetailsFragment"
+        android:label="PersonDetailsFragment" />
 </navigation>

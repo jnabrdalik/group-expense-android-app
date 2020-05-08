@@ -10,19 +10,31 @@ public class ExpenseWithPeopleInvolved {
     @Embedded
     private Expense expense;
 
+    @Relation(parentColumn = "payer_id", entityColumn = "id")
+    private Person payer;
+
     @Relation(
-            parentColumn = "expense_id",
-            entityColumn = "person_id",
-            associateBy = @Junction(ExpensePersonCrossRef.class))
+            parentColumn = "id",
+            entity = Person.class,
+            entityColumn = "id",
+            associateBy = @Junction(
+                    value = ExpensePersonCrossRef.class,
+                    parentColumn = "expense_id",
+                    entityColumn = "person_id"))
     private List<Person> peopleInvolved;
 
-    public ExpenseWithPeopleInvolved(Expense expense, List<Person> peopleInvolved) {
+    public ExpenseWithPeopleInvolved(Expense expense, Person payer, List<Person> peopleInvolved) {
         this.expense = expense;
+        this.payer = payer;
         this.peopleInvolved = peopleInvolved;
     }
 
     public Expense getExpense() {
         return expense;
+    }
+
+    public Person getPayer() {
+        return payer;
     }
 
     public List<Person> getPeopleInvolved() {

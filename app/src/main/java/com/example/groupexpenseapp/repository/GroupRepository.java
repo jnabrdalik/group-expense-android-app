@@ -35,8 +35,8 @@ public class GroupRepository {
     private GroupRepository(Application application) {
         AppDatabase database = AppDatabase.getInstance(application);
         groupDao = database.groupDao();
-        allGroups = groupDao.getAllGroups();
-        groupsWithSummary = groupDao.getGroupsWithSummary();
+        allGroups = groupDao.getGroupsNewestFirst();
+        groupsWithSummary = groupDao.getGroupsWithSummaryNewestFirst();
     }
 
     public LiveData<List<GroupWithSummary>> getGroupsWithSummary() {

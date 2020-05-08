@@ -5,30 +5,21 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
-import androidx.recyclerview.widget.DiffUtil;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.groupexpenseapp.R;
 import com.example.groupexpenseapp.databinding.ExpenseItemBinding;
 import com.example.groupexpenseapp.db.entity.ExpenseAndPayer;
+import com.example.groupexpenseapp.ui.adapter.diffutil.ExpenseAndPayerDiffUtil;
+import com.example.groupexpenseapp.ui.fragment.GroupFragmentDirections;
 
 public class ExpenseAdapter extends ListAdapter<ExpenseAndPayer, ExpenseAdapter.ExpenseViewHolder> {
 
     public ExpenseAdapter() {
-        super(new DiffUtil.ItemCallback<ExpenseAndPayer>() {
-            @Override
-            public boolean areItemsTheSame(@NonNull ExpenseAndPayer oldItem, @NonNull ExpenseAndPayer newItem) {
-                return oldItem.getExpense().getId() == newItem.getExpense().getId();
-            }
-
-            @Override
-            public boolean areContentsTheSame(@NonNull ExpenseAndPayer oldItem, @NonNull ExpenseAndPayer newItem) {
-                return oldItem.getExpense().getId() == newItem.getExpense().getId() &&
-                        oldItem.getExpense().getDescription().equals(newItem.getExpense().getDescription()) &&
-                        oldItem.getExpense().getAmount() == newItem.getExpense().getAmount();
-            }
-        });
+        super(new ExpenseAndPayerDiffUtil());
 
         setHasStableIds(true);
     }
@@ -50,8 +41,10 @@ public class ExpenseAdapter extends ListAdapter<ExpenseAndPayer, ExpenseAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ExpenseViewHolder holder, int position) {
-        ExpenseAndPayer expense = getItem(position);
-        holder.binding.setExpenseAndPayer(expense);
+        ExpenseAndPayer expenseAndPayer = getItem(position);
+        NavDirections directions = GroupFragmentDirections.actionGroupFragmentToExpenseDetailsFragment(expenseAndPayer.getExpense().getId());
+        holder.binding.setClickListener(v -> Navigation.findNavController(v).navigate(directions));
+        holder.binding.setExpenseAndPayer(expenseAndPayer);
         holder.binding.executePendingBindings();
     }
 
