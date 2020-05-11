@@ -54,14 +54,7 @@ public class GroupListFragment extends Fragment {
         viewModel = new ViewModelProvider(this).get(GroupListViewModel.class);
         adapter = new GroupAdapter(group -> displayGroupDeleteWarningDialog(group.getGroup()));
 
-
-//        //TODO move to ViewModel
-//        binding.addGroupButton.setOnClickListener(v ->
-//                Navigation.findNavController(v)
-//                        .navigate(GroupListFragmentDirections
-//                                .actionGroupListFragmentToCreateGroupFragment()));
         binding.addGroupButton.setOnClickListener(v -> displayCreateGroupDialog());
-
 
         subscribeUi(viewModel.getAllGroupsWithSummary());
         binding.groups.setAdapter(adapter);

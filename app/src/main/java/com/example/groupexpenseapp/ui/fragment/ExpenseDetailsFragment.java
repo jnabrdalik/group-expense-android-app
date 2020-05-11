@@ -42,17 +42,19 @@ public class ExpenseDetailsFragment extends Fragment {
         final ExpenseDetailsViewModel viewModel = new ViewModelProvider(this, factory)
                 .get(ExpenseDetailsViewModel.class);
 
+        binding.setLifecycleOwner(getViewLifecycleOwner());
+        binding.setViewmodel(viewModel);
+
+        binding.toolbar.setNavigationOnClickListener(v -> requireActivity().onBackPressed());
         adapter = new PersonInvolvedAdapter();
-        binding.selectPeopleInvolved.setAdapter(adapter);
-        //subscribeUi(viewModel.getPeopleToSelect());
+        subscribeUi(viewModel.getPeopleInvolved());
+        binding.peopleInvolved.setAdapter(adapter);
     }
 
-    private void subscribeUi(LiveData<List<Person>> peopleToSelect) {
-        peopleToSelect.observe(getViewLifecycleOwner(), people -> {
-            if (people != null)
-                adapter.submitList(people);
+    private void subscribeUi(LiveData<List<Person>> peopleInvolved) {
+        peopleInvolved.observe(getViewLifecycleOwner(), next -> {
+            if (next != null)
+                adapter.submitList(next);
         });
-
     }
-
 }

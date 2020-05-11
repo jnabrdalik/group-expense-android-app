@@ -6,7 +6,6 @@ import androidx.lifecycle.LiveData;
 
 import com.example.groupexpenseapp.db.AppDatabase;
 import com.example.groupexpenseapp.db.dao.ExpenseDao;
-import com.example.groupexpenseapp.db.entity.Expense;
 import com.example.groupexpenseapp.db.entity.ExpenseAndPayer;
 
 import java.util.List;
@@ -33,6 +32,10 @@ public class ExpenseRepository {
     private ExpenseRepository(Application application) {
         AppDatabase database = AppDatabase.getInstance(application);
         expenseDao = database.expenseDao();
+    }
+
+    public LiveData<ExpenseAndPayer> getExpenseAndPayer(long expenseId) {
+        return expenseDao.getExpenseAndPayer(expenseId);
     }
 
     public LiveData<List<ExpenseAndPayer>> getExpensesAndPayers(long groupId) {

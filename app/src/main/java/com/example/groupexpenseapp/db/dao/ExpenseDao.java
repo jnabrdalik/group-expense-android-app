@@ -10,7 +10,6 @@ import androidx.room.Update;
 
 import com.example.groupexpenseapp.db.entity.Expense;
 import com.example.groupexpenseapp.db.entity.ExpenseAndPayer;
-import com.example.groupexpenseapp.db.entity.ExpenseWithPeopleInvolved;
 
 import java.util.List;
 
@@ -26,6 +25,10 @@ public abstract class ExpenseDao {
     public abstract void delete(Expense expense);
 
     @Transaction
+    @Query("select * from expenses where id = :expenseId")
+    public abstract LiveData<ExpenseAndPayer> getExpenseAndPayer(long expenseId);
+
+    @Transaction
     @Query("select * from expenses where group_id = :groupId order by datetime(time_added) desc")
     public abstract LiveData<List<ExpenseAndPayer>> getExpensesFromGroupNewestFirst(long groupId);
 
@@ -36,10 +39,6 @@ public abstract class ExpenseDao {
     @Transaction
     @Query("select * from expenses where group_id = :groupId order by amount asc")
     public abstract LiveData<List<ExpenseAndPayer>> getExpensesAndPayersFromGroupMostExpensiveFirst(long groupId);
-
-    @Transaction
-    @Query("select * from expenses where id = :expenseId")
-    public abstract LiveData<ExpenseWithPeopleInvolved> getExpenseAndPeopleInvolved(long expenseId);
 
     @Transaction
     public void updatePeopleInvolved(long expenseId, int[] peopleRemovedIds, int[] peopleAddedIds) {

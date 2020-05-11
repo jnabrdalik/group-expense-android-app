@@ -20,6 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/colorPrimary"
+            app:navigationIcon="@drawable/ic_arrow_back"
             app:title="@{viewmodel.group.name}"
             app:titleTextColor="@color/titleColor" />
 
@@ -27,6 +28,7 @@
             android:id="@+id/group_tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:tabIndicatorColor="@color/black"
             app:tabBackground="@color/colorPrimary"
             app:tabRippleColor="@color/colorPrimary"
             app:tabTextColor="@color/titleColor" />

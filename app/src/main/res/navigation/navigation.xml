@@ -19,9 +19,9 @@
     </fragment>
     <fragment
         android:id="@+id/groupFragment"
-        android:name="com.example.groupexpenseapp.ui.fragment.GroupFragment"
+        android:name="com.example.groupexpenseapp.ui.fragment.GroupDetailsFragment"
         android:label="group_fragment"
-        tools:layout="@layout/group_fragment" >
+        tools:layout="@layout/group_details_fragment" >
         <argument
             android:name="groupId"
             app:argType="long" />

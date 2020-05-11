@@ -1,6 +1,9 @@
 package com.example.groupexpenseapp.ui.fragment;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -9,35 +12,31 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import com.example.groupexpenseapp.R;
-import com.example.groupexpenseapp.databinding.GroupFragmentBinding;
+import com.example.groupexpenseapp.databinding.GroupDetailsFragmentBinding;
 import com.example.groupexpenseapp.viewmodel.GroupViewModel;
 import com.example.groupexpenseapp.viewmodel.factory.GroupViewModelFactory;
 import com.google.android.material.tabs.TabLayoutMediator;
 
-public class GroupFragment extends Fragment {
+public class GroupDetailsFragment extends Fragment {
 
     private static final int N_OF_TABS = 3;
 
-    long groupId;
-    private GroupFragmentBinding binding;
+    private long groupId;
+    private GroupDetailsFragmentBinding binding;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.group_fragment, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.group_details_fragment, container, false);
 
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        groupId = GroupFragmentArgs.fromBundle(requireArguments()).getGroupId();
+        groupId = GroupDetailsFragmentArgs.fromBundle(requireArguments()).getGroupId();
         GroupViewModelFactory factory = new GroupViewModelFactory(
                 requireActivity().getApplication(), groupId);
 
@@ -46,7 +45,9 @@ public class GroupFragment extends Fragment {
 
         binding.setLifecycleOwner(getViewLifecycleOwner());
         binding.setViewmodel(viewModel);
+        binding.toolbar.setNavigationOnClickListener(v -> requireActivity().onBackPressed());
         binding.groupsRecyclerView.setAdapter(new GroupPagerAdapter(this));
+        //TODO move to xml
         new TabLayoutMediator(binding.groupTabs, binding.groupsRecyclerView,
                 ((tab, position) -> {
                     String name;
@@ -111,7 +112,6 @@ public class GroupFragment extends Fragment {
         @Override
         public int getItemCount() {
             return N_OF_TABS;
-
         }
     }
 }

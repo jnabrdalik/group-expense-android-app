@@ -45,11 +45,12 @@ public class PersonRepository {
         return groupPeople;
     }
 
-//    public LiveData<List<Person>> getPeopleInvolvedInExpense(long expenseId) {
-//        if (currentExpenseId == expenseId)
-//            return peopleInvolvedInExpense;
-//
-//        this.currentExpenseId = expenseId;
-//        //this.peopleInvolvedInExpense = personDao.get
-//    }
+    public LiveData<List<Person>> getPeopleInvolvedInExpense(long expenseId) {
+        if (currentExpenseId != expenseId) {
+            currentExpenseId = expenseId;
+            peopleInvolvedInExpense = personDao.getPeopleOwingForExpense(expenseId);
+        }
+
+        return peopleInvolvedInExpense;
+    }
 }

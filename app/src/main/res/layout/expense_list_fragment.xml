@@ -17,8 +17,7 @@
             android:id="@+id/expenses"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layoutManager="LinearLayoutManager"
-            android:layout_margin="8dp" />
+            app:layoutManager="LinearLayoutManager"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/add_group_button"

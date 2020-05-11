@@ -14,7 +14,7 @@ import com.example.groupexpenseapp.R;
 import com.example.groupexpenseapp.databinding.ExpenseItemBinding;
 import com.example.groupexpenseapp.db.entity.ExpenseAndPayer;
 import com.example.groupexpenseapp.ui.adapter.diffutil.ExpenseAndPayerDiffUtil;
-import com.example.groupexpenseapp.ui.fragment.GroupFragmentDirections;
+import com.example.groupexpenseapp.ui.fragment.GroupDetailsFragmentDirections;
 
 public class ExpenseAdapter extends ListAdapter<ExpenseAndPayer, ExpenseAdapter.ExpenseViewHolder> {
 
@@ -42,7 +42,7 @@ public class ExpenseAdapter extends ListAdapter<ExpenseAndPayer, ExpenseAdapter.
     @Override
     public void onBindViewHolder(@NonNull ExpenseViewHolder holder, int position) {
         ExpenseAndPayer expenseAndPayer = getItem(position);
-        NavDirections directions = GroupFragmentDirections.actionGroupFragmentToExpenseDetailsFragment(expenseAndPayer.getExpense().getId());
+        NavDirections directions = GroupDetailsFragmentDirections.actionGroupFragmentToExpenseDetailsFragment(expenseAndPayer.getExpense().getId());
         holder.binding.setClickListener(v -> Navigation.findNavController(v).navigate(directions));
         holder.binding.setExpenseAndPayer(expenseAndPayer);
         holder.binding.executePendingBindings();
