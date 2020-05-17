@@ -11,6 +11,8 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -47,6 +49,9 @@ public class ExpenseListFragment extends Fragment {
         adapter = new ExpenseAdapter();
         binding.expenses.setAdapter(adapter);
         binding.expenses.addItemDecoration(new DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL));
+
+        NavDirections directions = GroupDetailsFragmentDirections.actionGroupFragmentToAddExpenseFragment(groupId);
+        binding.addGroupButton.setOnClickListener(v -> Navigation.findNavController(v).navigate(directions));
         subscribeUi(viewModel.getGroupExpenses());
 
     }

@@ -12,7 +12,7 @@
         android:padding="?attr/dialogPreferredPadding">
 
         <EditText
-            android:id="@+id/new_group_name"
+            android:id="@+id/new_person_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>

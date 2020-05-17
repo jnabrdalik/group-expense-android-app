@@ -15,6 +15,7 @@ import com.example.groupexpenseapp.ui.adapter.diffutil.PersonDiffUtil;
 
 
 public class PersonAdapter extends ListAdapter<Person, PersonAdapter.PersonViewHolder> {
+
     public PersonAdapter() {
         super(new PersonDiffUtil());
 
@@ -32,6 +33,7 @@ public class PersonAdapter extends ListAdapter<Person, PersonAdapter.PersonViewH
         PersonItemBinding binding = DataBindingUtil
                 .inflate(LayoutInflater.from(parent.getContext()), R.layout.person_item,
                         parent, false);
+
         return new PersonViewHolder(binding);
     }
 

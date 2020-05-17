@@ -12,6 +12,7 @@ import com.example.groupexpenseapp.db.entity.Expense;
 import com.example.groupexpenseapp.db.entity.ExpenseAndPayer;
 
 import java.util.List;
+import java.util.Set;
 
 @Dao
 public abstract class ExpenseDao {
@@ -40,15 +41,23 @@ public abstract class ExpenseDao {
     @Query("select * from expenses where group_id = :groupId order by amount asc")
     public abstract LiveData<List<ExpenseAndPayer>> getExpensesAndPayersFromGroupMostExpensiveFirst(long groupId);
 
+
     @Transaction
-    public void updatePeopleInvolved(long expenseId, int[] peopleRemovedIds, int[] peopleAddedIds) {
-        for (long personId : peopleAddedIds)
+    public void updateOrInsertExpense(Expense expense, Set<Integer> peopleAddedIds, Set<Integer> peopleRemovedIds) {
+        int expenseId = expense.getId();
+
+        if (expenseId == 0)
+            expenseId = (int) insert(expense);
+        else
+            update(expense);
+
+        for (int personId : peopleAddedIds)
             insertPersonOwing(expenseId, personId);
 
-
-        for (long personId : peopleRemovedIds)
+        for (int personId : peopleRemovedIds)
             deletePersonOwing(expenseId, personId);
     }
+
 
     @Query("insert into expenses_people(expense_id, person_id) values(:expenseId, :personId)")
     public abstract void insertPersonOwing(long expenseId, long personId);

@@ -2,7 +2,6 @@ package com.example.groupexpenseapp.db;
 
 
 import android.content.Context;
-import android.provider.ContactsContract;
 
 import androidx.annotation.NonNull;
 import androidx.room.Database;
@@ -29,7 +28,7 @@ import java.util.concurrent.Executors;
 public abstract class AppDatabase extends RoomDatabase {
     private static final String DB_NAME = "group-expense-app-db";
     private static volatile AppDatabase INSTANCE;
-    public static final ExecutorService dbWriteExecutor = Executors.newFixedThreadPool(3);
+    public static final ExecutorService EXECUTOR_SERVICE = Executors.newFixedThreadPool(3);
     public static AppDatabase getInstance(final Context context) {
         if (INSTANCE == null) {
             synchronized (AppDatabase.class) {
@@ -54,7 +53,7 @@ public abstract class AppDatabase extends RoomDatabase {
         public void onOpen(@NonNull SupportSQLiteDatabase db) {
             super.onOpen(db);
 
-            dbWriteExecutor.execute(() -> {
+            EXECUTOR_SERVICE.execute(() -> {
                 GroupDao groupDao = INSTANCE.groupDao();
                 ExpenseDao expenseDao = INSTANCE.expenseDao();
                 PersonDao personDao = INSTANCE.personDao();
@@ -76,8 +75,8 @@ public abstract class AppDatabase extends RoomDatabase {
                         Expense expense = new Expense(
                                 DataGenerator.getRandomAmount(),
                                 expenseDescription,
-                                DataGenerator.getRandomDateTime(),
-                                groupId,
+                                OffsetDateTime.now(),
+                                DataGenerator.getRandomDate(), groupId,
                                 DataGenerator.selectRandomId(peopleIds));
                         int expenseId = (int) expenseDao.insert(expense);
 

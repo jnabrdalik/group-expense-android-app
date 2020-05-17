@@ -1,6 +1,7 @@
 package com.example.groupexpenseapp.db;
 
 import org.threeten.bp.Instant;
+import org.threeten.bp.LocalDate;
 import org.threeten.bp.OffsetDateTime;
 import org.threeten.bp.ZoneId;
 
@@ -13,7 +14,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class DataGenerator {
     private static String[] groupNames = {"Wyjazd", "Wakacje", "Impreza", "Wyjście do baru"};
     private static String[] names = {"Jan", "Michał", "Mateusz", "Jakub", "Piotr", "Kamil", "Marcin", "Anna", "Julia", "Karolina"};
-    private static String[] expenseDescriptions = {"Zakupy", "Jedzenie", "Piwo", "Bilety", "Napoje", "Paliwo", "Kino"};
+    private static String[] expenseDescriptions = {"Zakupy", "Jedzenie", "Piwo", "Bilety", "Napoje", "Paliwo", "Kino", "Pociąg", "Taxi", "Chipsy"};
 
     private DataGenerator() {
 
@@ -35,6 +36,11 @@ public class DataGenerator {
         int maxIndex = ThreadLocalRandom.current().nextInt(3, expenseDescriptions.length);
 
         return arrayOfDescriptions.subList(0, maxIndex);
+//        List<String> list = new ArrayList(Arrays.asList(expenseDescriptions));
+//        for (int i = 0; i < 15; i++) {
+//            list.addAll(Arrays.asList(Arrays.copyOf(expenseDescriptions, expenseDescriptions.length)));
+//        }
+//        return list;
     }
 
     public static List<String> getGroupNames() {
@@ -54,6 +60,12 @@ public class DataGenerator {
         long randomEpochSecond = ThreadLocalRandom.current().nextLong(yearAgoEpochSecond, currentTimeEpochSecond);
 
         return OffsetDateTime.ofInstant(Instant.ofEpochSecond(randomEpochSecond), ZoneId.systemDefault());
+    }
+
+    public static LocalDate getRandomDate() {
+        long days = ThreadLocalRandom.current().nextLong(365);
+
+        return LocalDate.now().minusDays(days);
     }
 
     public static int selectRandomId(List<Integer> ids) {

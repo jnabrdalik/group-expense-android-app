@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="viewmodel"
             type="com.example.groupexpenseapp.viewmodel.ExpenseDetailsViewModel" />
@@ -11,6 +12,7 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -20,8 +22,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:navigationIcon="@drawable/ic_arrow_back"
-                app:title="@{viewmodel.expenseAndPayer.expense.description}"
-                />
+                app:title="@{viewmodel.expenseAndPayer.expense.description}" />
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.core.widget.NestedScrollView
@@ -36,28 +37,29 @@
 
                 <TextView
                     android:id="@+id/expense_payer"
-                    android:textSize="24sp"
-                    android:text="@{@string/payer_paid(viewmodel.expenseAndPayer.payer.name)}"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:text="@{@string/payer_paid(viewmodel.expenseAndPayer.payer.name)}"
+                    android:textSize="24sp" />
 
                 <TextView
                     android:id="@+id/expense_amount"
-                    android:text="@{@string/money_format(viewmodel.expenseAndPayer.expense.amount)}"
-                    android:textSize="24sp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:text="@{@string/money_format(viewmodel.expenseAndPayer.expense.amount)}"
+                    android:textSize="24sp" />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="24sp"
-                    android:text="Za:"/>
+                    android:text="Za:"
+                    android:textSize="24sp" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/people_involved"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
             </LinearLayout>
 

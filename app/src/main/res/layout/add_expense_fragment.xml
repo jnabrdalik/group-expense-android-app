@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+    <variable
+        name="viewmodel"
+        type="com.example.groupexpenseapp.viewmodel.AddExpenseViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".ui.fragment.AddExpenseFragment">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
+            app:menu="@menu/add_expense_menu"
+            app:navigationIcon="@drawable/ic_close"
+            app:title="@string/new_expense_title" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/expense_descr"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textCapSentences"
+            android:hint="@string/for_what"
+            android:paddingHorizontal="@dimen/std_padding"
+            android:paddingTop="@dimen/std_padding">
+
+            <com.google.android.material.textfield.TextInputEditText
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@={viewmodel.description}"
+                android:inputType="text"
+                android:maxLines="1" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/expense_amount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/how_much"
+            android:paddingHorizontal="@dimen/std_padding"
+            android:paddingTop="@dimen/std_padding"
+            app:suffixText="@string/currency">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:text="@={viewmodel.amountStr}"
+                android:maxLines="1" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/payer"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/who_paid"
+            android:paddingHorizontal="@dimen/std_padding"
+            android:paddingTop="@dimen/std_padding">
+
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:id="@+id/new_expense_payer_dropdown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textCapSentences"
+                android:text="@={viewmodel.payerName}"
+                android:maxLines="1" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/new_expense_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:editable="false"
+            android:hint="@string/when"
+            android:paddingHorizontal="@dimen/std_padding"
+            android:paddingTop="@dimen/std_padding">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/date_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@={viewmodel.date}"
+                android:focusableInTouchMode="false" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/std_padding"
+            android:paddingTop="@dimen/std_padding"
+            android:text="@string/for_whom"
+            android:textAppearance="?attr/textAppearanceSubtitle1"
+            tools:text="Za kogo?" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/for_whom_choice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+<!--        <TextView-->
+<!--            android:id="@+id/test_text"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Nie wybrano"-->
+<!--            android:textAppearance="?attr/textAppearanceHeadline4"/>-->
+<!--        <Button-->
+<!--            android:id="@+id/test_button"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="aaa"/>-->
+
+    </LinearLayout>
+</layout>

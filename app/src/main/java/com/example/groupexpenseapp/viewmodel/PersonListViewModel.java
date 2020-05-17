@@ -12,17 +12,35 @@ import com.example.groupexpenseapp.repository.PersonRepository;
 import java.util.List;
 
 public class PersonListViewModel extends AndroidViewModel {
-    private LiveData<List<Person>> persons;
+    private LiveData<List<Person>> people;
+    private PersonRepository repository;
+    private long groupId;
 
     public PersonListViewModel(@NonNull Application application, long groupId) {
         super(application);
 
-        PersonRepository repository = PersonRepository.getInstance(application);
-        persons = repository.getGroupPersons(groupId);
+        this.groupId = groupId;
+        repository = PersonRepository.getInstance(application);
+        people = repository.getPeopleFromGroup(groupId);
     }
 
 
-    public LiveData<List<Person>> getPersons() {
-        return persons;
+    public LiveData<List<Person>> getPeople() {
+        return people;
+    }
+
+    public boolean nameExists(String personName) {
+        if (people != null)
+            for (Person person : people.getValue()) {
+                if (person.getName().equals(personName))
+                    return true;
+            }
+
+        return false;
+    }
+
+    public void addPerson(String personName) {
+        Person person = new Person(personName, (int) groupId);
+        repository.addPerson(person);
     }
 }

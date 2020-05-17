@@ -22,7 +22,6 @@ public class GroupDetailsFragment extends Fragment {
 
     private static final int N_OF_TABS = 3;
 
-    private long groupId;
     private GroupDetailsFragmentBinding binding;
 
 
@@ -36,7 +35,7 @@ public class GroupDetailsFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        groupId = GroupDetailsFragmentArgs.fromBundle(requireArguments()).getGroupId();
+        long groupId = GroupDetailsFragmentArgs.fromBundle(requireArguments()).getGroupId();
         GroupViewModelFactory factory = new GroupViewModelFactory(
                 requireActivity().getApplication(), groupId);
 
@@ -46,7 +45,7 @@ public class GroupDetailsFragment extends Fragment {
         binding.setLifecycleOwner(getViewLifecycleOwner());
         binding.setViewmodel(viewModel);
         binding.toolbar.setNavigationOnClickListener(v -> requireActivity().onBackPressed());
-        binding.groupsRecyclerView.setAdapter(new GroupPagerAdapter(this));
+        binding.groupsRecyclerView.setAdapter(new GroupPagerAdapter(this, groupId));
         //TODO move to xml
         new TabLayoutMediator(binding.groupTabs, binding.groupsRecyclerView,
                 ((tab, position) -> {
@@ -75,9 +74,12 @@ public class GroupDetailsFragment extends Fragment {
     }
 
     public class GroupPagerAdapter extends FragmentStateAdapter {
+        private long groupId;
 
-        public GroupPagerAdapter(Fragment fragment) {
+        public GroupPagerAdapter(Fragment fragment, long groupId) {
             super(fragment);
+
+            this.groupId = groupId;
         }
 
         @NonNull

@@ -40,4 +40,9 @@ public class Person {
     public int getGroupId() {
         return groupId;
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

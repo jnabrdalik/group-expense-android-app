@@ -12,10 +12,7 @@
         tools:layout="@layout/group_list_fragment">
         <action
             android:id="@+id/action_groupListFragment_to_groupFragment"
-            app:destination="@id/groupFragment" />
-        <action
-            android:id="@+id/action_groupListFragment_to_createGroupFragment"
-            app:destination="@id/createGroupFragment" />
+            app:destination="@id/groupFragment"/>
     </fragment>
     <fragment
         android:id="@+id/groupFragment"
@@ -31,21 +28,36 @@
         <action
             android:id="@+id/action_groupFragment_to_personDetailsFragment"
             app:destination="@id/personDetailsFragment" />
+        <action
+            android:id="@+id/action_groupFragment_to_addExpenseFragment"
+            app:destination="@id/addExpenseFragment" />
     </fragment>
     <fragment
-        android:id="@+id/createGroupFragment"
-        android:name="com.example.groupexpenseapp.ui.fragment.CreateGroupFragment"
-        android:label="CreateGroupFragment" />
-    <fragment
+        tools:layout="@layout/expense_details_fragment"
         android:id="@+id/expenseDetailsFragment"
         android:name="com.example.groupexpenseapp.ui.fragment.ExpenseDetailsFragment"
         android:label="ExpenseDetailsFragment" >
         <argument
             android:name="expenseId"
             app:argType="long" />
+        <action
+            android:id="@+id/action_expenseDetailsFragment_to_addExpenseFragment"
+            app:destination="@id/addExpenseFragment" />
     </fragment>
     <fragment
         android:id="@+id/personDetailsFragment"
         android:name="com.example.groupexpenseapp.ui.fragment.PersonDetailsFragment"
         android:label="PersonDetailsFragment" />
+    <fragment
+        android:id="@+id/addExpenseFragment"
+        android:name="com.example.groupexpenseapp.ui.fragment.AddExpenseFragment"
+        android:label="AddExpenseFragment" >
+        <argument
+            android:name="groupId"
+            app:argType="long" />
+        <argument
+            android:name="expenseId"
+            app:argType="long"
+            android:defaultValue="0L" />
+    </fragment>
 </navigation>

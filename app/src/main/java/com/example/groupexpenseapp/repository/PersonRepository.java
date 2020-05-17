@@ -36,7 +36,7 @@ public class PersonRepository {
         personDao = database.personDao();
     }
 
-    public LiveData<List<Person>> getGroupPersons(long groupId) {
+    public LiveData<List<Person>> getPeopleFromGroup(long groupId) {
         if (currentGroupId == groupId)
             return groupPeople;
 
@@ -52,5 +52,9 @@ public class PersonRepository {
         }
 
         return peopleInvolvedInExpense;
+    }
+
+    public void addPerson(Person person) {
+        AppDatabase.EXECUTOR_SERVICE.execute(() -> personDao.insert(person));
     }
 }

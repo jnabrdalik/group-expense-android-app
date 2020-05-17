@@ -5,6 +5,7 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
+import org.threeten.bp.LocalDate;
 import org.threeten.bp.OffsetDateTime;
 
 @Entity(tableName = "expenses",
@@ -26,16 +27,20 @@ public class Expense {
     @ColumnInfo(name = "time_added")
     private OffsetDateTime timeAdded;
 
+    @ColumnInfo(name = "date")
+    private LocalDate date;
+
     @ColumnInfo(name = "group_id")
     private int groupId;
 
     @ColumnInfo(name = "payer_id")
     private int payerId;
 
-    public Expense(double amount, String description, OffsetDateTime timeAdded, int groupId, int payerId) {
+    public Expense(double amount, String description, OffsetDateTime timeAdded, LocalDate date, int groupId, int payerId) {
         this.amount = amount;
         this.description = description;
         this.timeAdded = timeAdded;
+        this.date = date;
         this.groupId = groupId;
         this.payerId = payerId;
     }
@@ -66,5 +71,17 @@ public class Expense {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+//    public String getFormattedDate() {
+//        return timeAdded.toLocalDate().toString();
+//    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public String getFormattedDate() {
+        return date.toString();
     }
 }

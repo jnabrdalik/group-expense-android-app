@@ -1,5 +1,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -20,18 +21,16 @@
             type="android.view.View.OnClickListener" />
     </data>
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/group_card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="1dp"
         android:onClick="@{clickListener}"
         android:orientation="horizontal"
-        app:cardBackgroundColor="@color/cardview_light_background"
-        app:cardCornerRadius="3dp"
+        app:cardCornerRadius="4dp"
         app:cardElevation="4dp"
         app:cardUseCompatPadding="true"
-        app:contentPadding="8dp">
+        app:contentPadding="@dimen/std_padding">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -40,33 +39,36 @@
 
             <TextView
                 android:id="@+id/group_name"
+                android:textAppearance="?attr/textAppearanceHeadline4"
+                tools:text="Impreza"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="2dp"
                 android:text="@{group.name}"
-                android:textSize="24sp"
-                android:textStyle="bold" />
+                android:layout_marginBottom="8dp" />
             <TextView
                 android:id="@+id/group_person_count"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="2dp"
-                android:textSize="18dp"
+                tools:text="8 osób"
+                android:textAppearance="?attr/textAppearanceSubtitle2"
                 android:text="@{@string/person_count(personCount)}" />
             <TextView
                 android:id="@+id/group_expense_sum"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="2dp"
+                tools:text="128,83 zł łącznie"
+                android:textAppearance="?attr/textAppearanceSubtitle2"
                 android:text="@{@string/total_spent(expenseSum)}" />
             <TextView
                 android:id="@+id/group_creation_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="2dp"
+                tools:text="Utworzono 25.05.2020"
+                android:textAlignment="textEnd"
+                android:textAppearance="?attr/textAppearanceCaption"
                 android:text="@{@string/group_created(group.formattedTimeCreated)}" />
         </LinearLayout>
 
 
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 </layout>

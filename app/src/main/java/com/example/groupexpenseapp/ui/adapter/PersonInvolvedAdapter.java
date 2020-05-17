@@ -25,7 +25,6 @@ public class PersonInvolvedAdapter extends ListAdapter<Person, PersonInvolvedAda
         return getItem(position).getId();
     }
 
-
     @NonNull
     @Override
     public PersonInvolvedViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

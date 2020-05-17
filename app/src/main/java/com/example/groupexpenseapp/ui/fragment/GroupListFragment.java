@@ -1,5 +1,6 @@
 package com.example.groupexpenseapp.ui.fragment;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
@@ -10,7 +11,9 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.text.Editable;
@@ -18,6 +21,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -71,7 +75,7 @@ public class GroupListFragment extends Fragment {
         new AlertDialog.Builder(requireContext())
                 .setTitle("Usuń grupę")
                 .setMessage("Czy na pewno chcesz usunąć tę grupę? Tej operacji nie można cofnąć.")
-                .setPositiveButton("Tak", (dialog, which) -> viewModel.deleteGroup(group))
+                .setPositiveButton("Usuń", (dialog, which) -> viewModel.deleteGroup(group))
                 .setNegativeButton("Anuluj", null)
                 .show();
     }
@@ -85,12 +89,18 @@ public class GroupListFragment extends Fragment {
                 .setNegativeButton("Anuluj", null)
                 .create();
 
-
         EditText input = binding.newGroupName;
 
         dialog.setOnShowListener(d -> {
             Button positiveButton = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
             positiveButton.setEnabled(false);
+
+            if (input.requestFocus()) {
+                // show keyboard
+                InputMethodManager imm = (InputMethodManager) input.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+            }
+
             input.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -111,11 +121,18 @@ public class GroupListFragment extends Fragment {
 
             positiveButton.setOnClickListener(v -> {
                 String newGroupName = input.getText().toString().trim();
-                viewModel.addGroup(newGroupName);
+                viewModel.addGroup(newGroupName).subscribe(groupId -> {
+
+                    // hide keyboard
+                    InputMethodManager imm = (InputMethodManager) input.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(input.getWindowToken(), 0);
+
+                    NavDirections directions = GroupListFragmentDirections
+                            .actionGroupListFragmentToGroupFragment(groupId);
+                    NavHostFragment.findNavController(this).navigate(directions);
+                }).dispose();
+
                 d.dismiss();
-                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) this.binding.groups.getLayoutManager();
-                linearLayoutManager.scrollToPositionWithOffset(0, 0);
-                //poczekaj aż się utworzy i wejdź w grupę
             });
         });
 
