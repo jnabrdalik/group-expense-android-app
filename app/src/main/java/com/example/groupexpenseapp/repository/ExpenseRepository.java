@@ -8,8 +8,8 @@ import com.example.groupexpenseapp.db.AppDatabase;
 import com.example.groupexpenseapp.db.dao.ExpenseDao;
 import com.example.groupexpenseapp.db.entity.Expense;
 import com.example.groupexpenseapp.db.entity.ExpenseAndPayer;
+import com.example.groupexpenseapp.db.entity.ExpenseWithPeopleInvolved;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -41,14 +41,14 @@ public class ExpenseRepository {
 
     public Single<Long> addExpense(Expense expense) {
         return Single.fromFuture(
-                AppDatabase.EXECUTOR_SERVICE.submit(
+                AppDatabase.executorService.submit(
                         () -> expenseDao.insert(expense)
                 )
         );
     }
 
     public void updateOrInsertExpenseWithPeopleInvolved(Expense expense, Set<Integer> selectedIds, Set<Integer> previouslySelectedIds) {
-        AppDatabase.EXECUTOR_SERVICE.execute(() -> {
+        AppDatabase.executorService.execute(() -> {
             // TODO
             expenseDao.updateOrInsertExpense(expense, selectedIds, previouslySelectedIds);
         });
@@ -56,6 +56,10 @@ public class ExpenseRepository {
 
     public LiveData<ExpenseAndPayer> getExpenseAndPayer(long expenseId) {
         return expenseDao.getExpenseAndPayer(expenseId);
+    }
+
+    public LiveData<ExpenseWithPeopleInvolved> getExpenseWithPeopleInvolved(long expenseId) {
+        return expenseDao.getExpenseWithPeopleInvolved(expenseId);
     }
 
     public LiveData<List<ExpenseAndPayer>> getExpensesAndPayers(long groupId) {
@@ -68,4 +72,7 @@ public class ExpenseRepository {
         return groupExpenses;
     }
 
+    public void deleteExpense(Expense expense) {
+        AppDatabase.executorService.execute(() -> expenseDao.delete(expense));
+    }
 }

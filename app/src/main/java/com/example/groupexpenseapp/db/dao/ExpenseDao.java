@@ -10,6 +10,7 @@ import androidx.room.Update;
 
 import com.example.groupexpenseapp.db.entity.Expense;
 import com.example.groupexpenseapp.db.entity.ExpenseAndPayer;
+import com.example.groupexpenseapp.db.entity.ExpenseWithPeopleInvolved;
 
 import java.util.List;
 import java.util.Set;
@@ -41,6 +42,9 @@ public abstract class ExpenseDao {
     @Query("select * from expenses where group_id = :groupId order by amount asc")
     public abstract LiveData<List<ExpenseAndPayer>> getExpensesAndPayersFromGroupMostExpensiveFirst(long groupId);
 
+    @Transaction
+    @Query("select * from expenses where id = :expenseId")
+    public abstract LiveData<ExpenseWithPeopleInvolved> getExpenseWithPeopleInvolved(long expenseId);
 
     @Transaction
     public void updateOrInsertExpense(Expense expense, Set<Integer> peopleAddedIds, Set<Integer> peopleRemovedIds) {
@@ -51,11 +55,11 @@ public abstract class ExpenseDao {
         else
             update(expense);
 
-        for (int personId : peopleAddedIds)
-            insertPersonOwing(expenseId, personId);
-
         for (int personId : peopleRemovedIds)
             deletePersonOwing(expenseId, personId);
+
+        for (int personId : peopleAddedIds)
+            insertPersonOwing(expenseId, personId);
     }
 
 

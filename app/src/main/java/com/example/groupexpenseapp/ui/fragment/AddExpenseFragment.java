@@ -3,6 +3,8 @@ package com.example.groupexpenseapp.ui.fragment;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -10,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.groupexpenseapp.R;
 import com.example.groupexpenseapp.databinding.AddExpenseFragmentBinding;
+import com.example.groupexpenseapp.db.entity.Expense;
 import com.example.groupexpenseapp.db.entity.Person;
 import com.example.groupexpenseapp.ui.adapter.PersonInvolvedChoiceAdapter;
 import com.example.groupexpenseapp.viewmodel.AddExpenseViewModel;
@@ -51,24 +55,38 @@ public class AddExpenseFragment extends Fragment {
     }
 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        long groupId = AddExpenseFragmentArgs.fromBundle(requireArguments()).getGroupId();
+        AddExpenseFragmentArgs args = AddExpenseFragmentArgs.fromBundle(requireArguments());
+        long groupId = args.getGroupId();
+
         AddExpenseViewModelFactory factory = new AddExpenseViewModelFactory(
                 requireActivity().getApplication(), groupId);
 
         viewModel = new ViewModelProvider(this, factory)
                 .get(AddExpenseViewModel.class);
 
-        binding.setViewmodel(viewModel);
-
 
         setupToolbar();
         setupDescriptionInput();
-        setupAmountInput(binding.expenseAmount);
+        setupAmountInput();
         setupPayerInput(binding.payer);
-        setupDateInput(binding.dateInput);
+
         setupPeopleInvolvedSelection();
 
         subscribeUi();
+
+        long expenseId = args.getExpenseId();
+        if (expenseId != 0) {
+            viewModel.getExpenseWithPeopleInvolved(expenseId).observe(getViewLifecycleOwner(), next -> {
+                viewModel.setExpense(next);
+                binding.setViewmodel(viewModel);
+                setupDateInput(binding.dateInput);
+            });
+        }
+        else {
+            binding.setViewmodel(viewModel);
+            setupDateInput(binding.dateInput);
+        }
+
     }
 
     private void setupToolbar() {
@@ -89,20 +107,19 @@ public class AddExpenseFragment extends Fragment {
     }
 
     private void setupDateInput(TextInputEditText dateInput) {
-        dateInput.setText(LocalDate.now().toString());
-
-        LocalDate selectedDate = LocalDate.now();
+        LocalDate selectedDate = LocalDate.parse(viewModel.date, viewModel.formatter);
 
         DatePickerDialog datePicker =
-                new DatePickerDialog(requireContext(), (v, year, month, dayOfMonth) -> {
-                    //viewModel.setTimeAdded(year, month + 1, dayOfMonth);
-                    dateInput.setText(LocalDate.of(year, month + 1, dayOfMonth).format(viewModel.formatter));
+                new DatePickerDialog(requireContext(), (v, year, month, dayOfMonth) ->
+                        dateInput.setText(
+                                LocalDate.of(year, month + 1, dayOfMonth)
+                                        .format(viewModel.formatter)), selectedDate.getYear(), selectedDate.getMonth().getValue() - 1, selectedDate.getDayOfMonth());
 
-                }, selectedDate.getYear(), selectedDate.getMonth().getValue() - 1, selectedDate.getDayOfMonth());
         dateInput.setOnClickListener(v -> datePicker.show());
     }
 
-    private void setupAmountInput(TextInputLayout textInputLayout) {
+    private void setupAmountInput() {
+        TextInputLayout textInputLayout = binding.expenseAmount;
         EditText editText = textInputLayout.getEditText();
         editText.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) {
@@ -122,6 +139,7 @@ public class AddExpenseFragment extends Fragment {
                 textInputLayout.setError(null);
             }
         });
+
     }
 
     private void setupDescriptionInput() {

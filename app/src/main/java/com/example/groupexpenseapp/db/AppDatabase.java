@@ -28,7 +28,7 @@ import java.util.concurrent.Executors;
 public abstract class AppDatabase extends RoomDatabase {
     private static final String DB_NAME = "group-expense-app-db";
     private static volatile AppDatabase INSTANCE;
-    public static final ExecutorService EXECUTOR_SERVICE = Executors.newFixedThreadPool(3);
+    public static final ExecutorService executorService = Executors.newFixedThreadPool(3);
     public static AppDatabase getInstance(final Context context) {
         if (INSTANCE == null) {
             synchronized (AppDatabase.class) {
@@ -53,7 +53,7 @@ public abstract class AppDatabase extends RoomDatabase {
         public void onOpen(@NonNull SupportSQLiteDatabase db) {
             super.onOpen(db);
 
-            EXECUTOR_SERVICE.execute(() -> {
+            executorService.execute(() -> {
                 GroupDao groupDao = INSTANCE.groupDao();
                 ExpenseDao expenseDao = INSTANCE.expenseDao();
                 PersonDao personDao = INSTANCE.personDao();

@@ -4,9 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-    <variable
-        name="viewmodel"
-        type="com.example.groupexpenseapp.viewmodel.AddExpenseViewModel" />
+
+        <variable
+            name="viewmodel"
+            type="com.example.groupexpenseapp.viewmodel.AddExpenseViewModel" />
+
     </data>
 
     <LinearLayout
@@ -28,8 +30,8 @@
             android:id="@+id/expense_descr"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textCapSentences"
             android:hint="@string/for_what"
+            android:inputType="textCapSentences"
             android:paddingHorizontal="@dimen/std_padding"
             android:paddingTop="@dimen/std_padding">
 
@@ -37,9 +39,9 @@
 
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@={viewmodel.description}"
                 android:inputType="text"
-                android:maxLines="1" />
+                android:maxLines="1"
+                android:text="@={viewmodel.description}" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -56,8 +58,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="numberDecimal"
-                android:text="@={viewmodel.amountStr}"
-                android:maxLines="1" />
+                android:maxLines="1"
+                android:text="@={viewmodel.amountStr}" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -75,8 +77,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textCapSentences"
-                android:text="@={viewmodel.payerName}"
-                android:maxLines="1" />
+                android:maxLines="1"
+                android:text="@={viewmodel.payerName}" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -93,8 +95,8 @@
                 android:id="@+id/date_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@={viewmodel.date}"
-                android:focusableInTouchMode="false" />
+                android:focusableInTouchMode="false"
+                android:text="@={viewmodel.date}" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -114,17 +116,17 @@
             android:layout_height="wrap_content"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-<!--        <TextView-->
-<!--            android:id="@+id/test_text"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="Nie wybrano"-->
-<!--            android:textAppearance="?attr/textAppearanceHeadline4"/>-->
-<!--        <Button-->
-<!--            android:id="@+id/test_button"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="aaa"/>-->
+        <!--        <TextView-->
+        <!--            android:id="@+id/test_text"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:text="Nie wybrano"-->
+        <!--            android:textAppearance="?attr/textAppearanceHeadline4"/>-->
+        <!--        <Button-->
+        <!--            android:id="@+id/test_button"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:text="aaa"/>-->
 
     </LinearLayout>
 </layout>

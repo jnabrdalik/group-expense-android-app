@@ -47,13 +47,13 @@ public class GroupRepository {
 
     public Single<Long> addGroup(Group group) {
         return Single.fromFuture(
-                AppDatabase.EXECUTOR_SERVICE.submit(
+                AppDatabase.executorService.submit(
                         () -> groupDao.insert(group)
                 )
         );
     }
 
     public void deleteGroup(Group group) {
-        AppDatabase.EXECUTOR_SERVICE.execute(() -> groupDao.delete(group));
+        AppDatabase.executorService.execute(() -> groupDao.delete(group));
     }
 }

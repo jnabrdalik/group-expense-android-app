@@ -55,6 +55,6 @@ public class PersonRepository {
     }
 
     public void addPerson(Person person) {
-        AppDatabase.EXECUTOR_SERVICE.execute(() -> personDao.insert(person));
+        AppDatabase.executorService.execute(() -> personDao.insert(person));
     }
 }

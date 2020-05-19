@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import com.example.groupexpenseapp.db.entity.Expense;
 import com.example.groupexpenseapp.db.entity.ExpenseAndPayer;
 import com.example.groupexpenseapp.db.entity.Person;
 import com.example.groupexpenseapp.repository.ExpenseRepository;
@@ -35,5 +36,9 @@ public class ExpenseDetailsViewModel extends AndroidViewModel {
 
     public LiveData<List<Person>> getPeopleInvolved() {
         return peopleInvolved;
+    }
+
+    public void deleteExpense(Expense expense) {
+        expenseRepository.deleteExpense(expense);
     }
 }

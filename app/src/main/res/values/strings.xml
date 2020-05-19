@@ -19,4 +19,5 @@
     <string name="when">Kiedy?</string>
     <string name="new_expense_title">Nowy wydatek</string>
     <string name="edit">Edytuj</string>
+    <string name="delete">Usuń</string>
 </resources>
