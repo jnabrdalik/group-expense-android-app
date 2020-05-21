@@ -77,12 +77,12 @@ public class AddExpenseViewModel extends AndroidViewModel {
         LocalDate date = LocalDate.parse(this.date, formatter);
         Expense expense = new Expense(amount, description, timeAdded, date, groupId, payerId);
 
-        if (expenseId != 0)
-            expense.setId(expenseId);
-
         Set<Integer> previouslySelectedIds = new HashSet<>();
-        for (Person person : expenseWithPeopleInvolved.getPeopleInvolved())
-            previouslySelectedIds.add(person.getId());
+        if (expenseId != 0) {
+            expense.setId(expenseId);
+            for (Person person : expenseWithPeopleInvolved.getPeopleInvolved())
+                previouslySelectedIds.add(person.getId());
+        }
 
         expenseRepository.updateOrInsertExpenseWithPeopleInvolved(expense, selectedItemIds, previouslySelectedIds);
     }

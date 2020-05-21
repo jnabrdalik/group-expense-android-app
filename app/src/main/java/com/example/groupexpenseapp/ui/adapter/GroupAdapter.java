@@ -18,7 +18,7 @@ import com.example.groupexpenseapp.ui.fragment.GroupListFragmentDirections;
 import com.example.groupexpenseapp.ui.GroupLongClickCallback;
 
 import java.util.List;
-
+// TODO switch to ListAdapter
 public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHolder> {
     GroupLongClickCallback longClickCallback;
     private List<GroupWithSummary> groups;
@@ -39,6 +39,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
             notifyItemRangeChanged(0, groups.size());
         }
         else {
+
             DiffUtil.DiffResult result = DiffUtil.calculateDiff(new DiffUtil.Callback() {
                 @Override
                 public int getOldListSize() {
@@ -60,7 +61,10 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
                     GroupWithSummary newGroup = newGroups.get(newItemPosition);
                     GroupWithSummary oldGroup = groups.get(oldItemPosition);
 
-                    return newGroup.getGroup().getId() == oldGroup.getGroup().getId() && newGroup.getGroup().getName().equals(oldGroup.getGroup().getName());
+                    return newGroup.getGroup().getId() == oldGroup.getGroup().getId() &&
+                            newGroup.getGroup().getName().equals(oldGroup.getGroup().getName()) &&
+                            newGroup.getExpenseSum() == oldGroup.getExpenseSum() &&
+                            newGroup.getPersonCount() == oldGroup.getPersonCount();
                 }
             });
             groups = newGroups;

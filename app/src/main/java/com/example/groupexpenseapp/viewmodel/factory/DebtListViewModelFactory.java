@@ -13,9 +13,9 @@ public class DebtListViewModelFactory extends ViewModelProvider.NewInstanceFacto
 
     @NonNull
     private final Application application;
-    private final int groupId;
+    private final long groupId;
 
-    public DebtListViewModelFactory(@NonNull Application application, int groupId) {
+    public DebtListViewModelFactory(@NonNull Application application, long groupId) {
         this.application = application;
         this.groupId = groupId;
     }
@@ -24,11 +24,6 @@ public class DebtListViewModelFactory extends ViewModelProvider.NewInstanceFacto
     @Override
     @NonNull
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-//        try {
-//            return (T) Class.forName(modelClass.getName()).getConstructor(Application.class, Integer.TYPE).newInstance(application, groupId);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
         return (T) new DebtListViewModel(application, groupId);
     }
 }

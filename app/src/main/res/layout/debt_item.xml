@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="debt"
+            type="com.example.groupexpenseapp.debt.Debt" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/std_padding">
+
+
+        <CheckBox
+            android:id="@+id/checkBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:text="@{debt.debtor.name}"
+            android:textAlignment="center"
+            android:textAppearance="?attr/textAppearanceBody1"
+            tools:text="Andrzej" />
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:src="@drawable/ic_arrow_right" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:text="@{debt.creditor.name}"
+            android:textAlignment="center"
+            android:textAppearance="?attr/textAppearanceBody1"
+            tools:text="Zbigniew" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="@{@string/money_format(debt.amount)}"
+            android:textAlignment="textEnd"
+            android:textAppearance="?attr/textAppearanceBody1"
+            tools:text="2849,92 zł" />
+
+    </LinearLayout>
+</layout>

@@ -141,7 +141,7 @@ public class AddExpenseFragment extends Fragment {
         });
 
     }
-
+    // TODO can't type if launched for the second time
     private void setupDescriptionInput() {
         TextInputLayout textInputLayout = binding.expenseDescr;
         EditText editText = textInputLayout.getEditText();

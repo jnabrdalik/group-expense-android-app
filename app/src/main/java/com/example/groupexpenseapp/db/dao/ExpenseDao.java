@@ -68,4 +68,12 @@ public abstract class ExpenseDao {
 
     @Query("delete from expenses_people where expense_id = :expenseId and person_id = :personId")
     abstract void deletePersonOwing(long expenseId, long personId);
+
+    @Transaction
+    @Query("select * from expenses where group_id = :groupId")
+    public abstract List<ExpenseWithPeopleInvolved> getExpensesAndPeopleInvolvedSync(long groupId);
+
+    @Transaction
+    @Query("select * from expenses where group_id = :groupId")
+    public abstract LiveData<List<ExpenseWithPeopleInvolved>> getExpensesAndPeopleInvolved(long groupId);
 }

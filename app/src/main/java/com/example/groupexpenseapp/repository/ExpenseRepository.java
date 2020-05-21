@@ -3,12 +3,16 @@ package com.example.groupexpenseapp.repository;
 import android.app.Application;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 
 import com.example.groupexpenseapp.db.AppDatabase;
 import com.example.groupexpenseapp.db.dao.ExpenseDao;
 import com.example.groupexpenseapp.db.entity.Expense;
 import com.example.groupexpenseapp.db.entity.ExpenseAndPayer;
 import com.example.groupexpenseapp.db.entity.ExpenseWithPeopleInvolved;
+import com.example.groupexpenseapp.debt.Debt;
+import com.example.groupexpenseapp.debt.DebtUtil;
 
 import java.util.List;
 import java.util.Set;
@@ -74,5 +78,25 @@ public class ExpenseRepository {
 
     public void deleteExpense(Expense expense) {
         AppDatabase.executorService.execute(() -> expenseDao.delete(expense));
+    }
+
+    public LiveData<List<Debt>> getDebts(long groupId) {
+        return Transformations.switchMap(expenseDao.getExpensesAndPeopleInvolved(groupId), next -> {
+            MutableLiveData<List<Debt>> debts = new MutableLiveData<>();
+            AppDatabase.executorService.execute(() -> {
+                DebtUtil resolver = new DebtUtil(next);
+                debts.postValue(resolver.getDebts());
+            });
+            return debts;
+        });
+
+//        MutableLiveData<List<Debt>> debts = new MutableLiveData<>();
+//
+//        AppDatabase.executorService.execute(() -> {
+//            DebtResolver resolver = new DebtResolver(expenseDao.getExpensesAndPeopleInvolvedSync(groupId));
+//            debts.postValue(resolver.getDebts());
+//        });
+//
+//        return debts;
     }
 }

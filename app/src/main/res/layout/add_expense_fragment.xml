@@ -24,7 +24,8 @@
             android:background="@color/colorPrimary"
             app:menu="@menu/add_expense_menu"
             app:navigationIcon="@drawable/ic_close"
-            app:title="@string/new_expense_title" />
+            app:title="@string/new_expense_title" >
+        </com.google.android.material.appbar.MaterialToolbar>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/expense_descr"
@@ -32,6 +33,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/for_what"
             android:inputType="textCapSentences"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:paddingHorizontal="@dimen/std_padding"
             android:paddingTop="@dimen/std_padding">
 
@@ -49,6 +51,7 @@
             android:id="@+id/expense_amount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:hint="@string/how_much"
             android:paddingHorizontal="@dimen/std_padding"
             android:paddingTop="@dimen/std_padding"
@@ -65,7 +68,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/payer"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/who_paid"
@@ -85,6 +88,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/new_expense_date"
             android:layout_width="match_parent"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_height="wrap_content"
             android:editable="false"
             android:hint="@string/when"
