@@ -9,7 +9,7 @@ import androidx.room.Transaction;
 import androidx.room.Update;
 
 import com.example.groupexpenseapp.db.entity.Person;
-import com.example.groupexpenseapp.db.entity.PersonWithRelatedExpenses;
+import com.example.groupexpenseapp.db.entity.PersonWithBalance;
 
 import java.util.List;
 
@@ -46,7 +46,7 @@ public abstract class PersonDao {
 
     @Transaction
     @Query("select * from persons where id = :personId")
-    public abstract LiveData<PersonWithRelatedExpenses> getPersonWithRelatedExpenses(long personId);
+    public abstract LiveData<PersonWithBalance> getPersonWithRelatedExpenses(long personId);
 
     @Query("select * from persons join expenses_people on persons.id = expenses_people.person_id where expenses_people.expense_id = :expenseId")
     public abstract LiveData<List<Person>> getPeopleOwingForExpense(long expenseId);

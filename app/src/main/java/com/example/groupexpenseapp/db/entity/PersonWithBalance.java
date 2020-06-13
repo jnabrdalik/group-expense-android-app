@@ -6,7 +6,7 @@ import androidx.room.Relation;
 
 import java.util.List;
 
-public class PersonWithRelatedExpenses {
+public class PersonWithBalance {
     @Embedded
     private Person person;
 
@@ -25,7 +25,7 @@ public class PersonWithRelatedExpenses {
                     entityColumn = "expense_id"))
     private List<Expense> expensesWhereOwes;
 
-    public PersonWithRelatedExpenses(Person person, List<Expense> expensesPaidFor, List<Expense> expensesWhereOwes) {
+    public PersonWithBalance(Person person, List<Expense> expensesPaidFor, List<Expense> expensesWhereOwes) {
         this.person = person;
         this.expensesPaidFor = expensesPaidFor;
         this.expensesWhereOwes = expensesWhereOwes;
@@ -35,12 +35,16 @@ public class PersonWithRelatedExpenses {
         return person;
     }
 
-    public List<Expense> getExpensesPaidFor() {
-        return expensesPaidFor;
-    }
+    public double getBalance() {
+        double balance = 0.0;
 
-    public List<Expense> getExpensesWhereOwes() {
-        return expensesWhereOwes;
+        for (Expense expense : expensesPaidFor)
+            balance += expense.getAmount();
+
+        for (Expense expense : expensesWhereOwes)
+            balance -= expense.getAmount();
+
+        return balance;
     }
 
 }

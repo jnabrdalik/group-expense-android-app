@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
@@ -18,7 +19,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.groupexpenseapp.R;
 import com.example.groupexpenseapp.databinding.ExpenseListFragmentBinding;
-import com.example.groupexpenseapp.db.entity.ExpenseAndPayer;
+import com.example.groupexpenseapp.db.entity.Expense;
+import com.example.groupexpenseapp.db.entity.ExpenseWithPeopleInvolved;
 import com.example.groupexpenseapp.ui.adapter.ExpenseAdapter;
 import com.example.groupexpenseapp.viewmodel.ExpenseListViewModel;
 import com.example.groupexpenseapp.viewmodel.factory.ExpenseListViewModelFactory;
@@ -26,6 +28,7 @@ import com.example.groupexpenseapp.viewmodel.factory.ExpenseListViewModelFactory
 import java.util.List;
 
 public class ExpenseListFragment extends Fragment {
+    private ExpenseListViewModel viewModel;
     private ExpenseListFragmentBinding binding;
     private ExpenseAdapter adapter;
 
@@ -43,10 +46,24 @@ public class ExpenseListFragment extends Fragment {
         ExpenseListViewModelFactory factory = new ExpenseListViewModelFactory(
                 requireActivity().getApplication(), groupId);
 
-        final ExpenseListViewModel viewModel = new ViewModelProvider(this, factory)
+        viewModel = new ViewModelProvider(this, factory)
                 .get(ExpenseListViewModel.class);
 
-        adapter = new ExpenseAdapter();
+        ExpenseAdapter.OnHolderButtonsClickedListener listener = new ExpenseAdapter.OnHolderButtonsClickedListener() {
+            @Override
+            public void onEdit(Expense expense) {
+                NavDirections directions = GroupDetailsFragmentDirections
+                        .actionGroupFragmentToAddExpenseFragment(expense.getGroupId())
+                        .setExpenseId(expense.getId());
+                Navigation.findNavController(requireView()).navigate(directions);
+            }
+
+            @Override
+            public void onDelete(Expense expense) {
+                displayGroupDeleteWarningDialog(expense);
+            }
+        };
+        adapter = new ExpenseAdapter(listener);
         binding.expenses.setAdapter(adapter);
         binding.expenses.addItemDecoration(new DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL));
 
@@ -56,10 +73,19 @@ public class ExpenseListFragment extends Fragment {
 
     }
 
-    private void subscribeUi(LiveData<List<ExpenseAndPayer>> groupExpenses) {
+    private void subscribeUi(LiveData<List<ExpenseWithPeopleInvolved>> groupExpenses) {
         groupExpenses.observe(getViewLifecycleOwner(), expenses -> {
             if (expenses != null)
                 adapter.submitList(expenses);
         });
+    }
+
+    private void displayGroupDeleteWarningDialog(Expense expense) {
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Usuń wydatek")
+                .setMessage("Czy na pewno chcesz usunąć ten wydatek? Tej operacji nie można cofnąć.")
+                .setPositiveButton("Usuń", (dialog, which) -> viewModel.deleteExpense(expense))
+                .setNegativeButton("Anuluj", null)
+                .show();
     }
 }

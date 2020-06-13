@@ -29,7 +29,8 @@
         android:orientation="horizontal"
         app:cardCornerRadius="4dp"
         app:cardElevation="4dp"
-        app:cardUseCompatPadding="true"
+        android:layout_marginHorizontal="@dimen/std_padding"
+        android:layout_marginTop="@dimen/std_padding"
         app:contentPadding="@dimen/std_padding">
 
         <LinearLayout
@@ -40,6 +41,7 @@
             <TextView
                 android:id="@+id/group_name"
                 android:textAppearance="?attr/textAppearanceHeadline4"
+                android:textColor="?android:attr/textColorPrimary"
                 tools:text="Impreza"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -50,14 +52,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:text="8 osób"
-                android:textAppearance="?attr/textAppearanceSubtitle2"
+                android:textAppearance="?attr/textAppearanceCaption"
                 android:text="@{@string/person_count(personCount)}" />
             <TextView
                 android:id="@+id/group_expense_sum"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:text="128,83 zł łącznie"
-                android:textAppearance="?attr/textAppearanceSubtitle2"
+                android:textAppearance="?attr/textAppearanceCaption"
                 android:text="@{@string/total_spent(expenseSum)}" />
             <TextView
                 android:id="@+id/group_creation_time"

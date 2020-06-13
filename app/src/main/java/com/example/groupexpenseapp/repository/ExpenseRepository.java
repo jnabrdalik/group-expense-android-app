@@ -9,7 +9,6 @@ import androidx.lifecycle.Transformations;
 import com.example.groupexpenseapp.db.AppDatabase;
 import com.example.groupexpenseapp.db.dao.ExpenseDao;
 import com.example.groupexpenseapp.db.entity.Expense;
-import com.example.groupexpenseapp.db.entity.ExpenseAndPayer;
 import com.example.groupexpenseapp.db.entity.ExpenseWithPeopleInvolved;
 import com.example.groupexpenseapp.debt.Debt;
 import com.example.groupexpenseapp.debt.DebtUtil;
@@ -35,7 +34,7 @@ public class ExpenseRepository {
     }
 
     private ExpenseDao expenseDao;
-    private LiveData<List<ExpenseAndPayer>> groupExpenses;
+    private LiveData<List<ExpenseWithPeopleInvolved>> groupExpenses;
     private long currentGroupId;
 
     private ExpenseRepository(Application application) {
@@ -58,20 +57,16 @@ public class ExpenseRepository {
         });
     }
 
-    public LiveData<ExpenseAndPayer> getExpenseAndPayer(long expenseId) {
-        return expenseDao.getExpenseAndPayer(expenseId);
-    }
-
     public LiveData<ExpenseWithPeopleInvolved> getExpenseWithPeopleInvolved(long expenseId) {
         return expenseDao.getExpenseWithPeopleInvolved(expenseId);
     }
 
-    public LiveData<List<ExpenseAndPayer>> getExpensesAndPayers(long groupId) {
+    public LiveData<List<ExpenseWithPeopleInvolved>> getExpensesWithPeopleInvolved(long groupId) {
         if (currentGroupId == groupId)
             return groupExpenses;
 
         currentGroupId = groupId;
-        groupExpenses = expenseDao.getExpensesAndPayersFromGroupMostExpensiveFirst(groupId);
+        groupExpenses = expenseDao.getExpensesWithPeopleInvolvedFromGroupMostExpensiveFirst(groupId);
 
         return groupExpenses;
     }
@@ -99,4 +94,6 @@ public class ExpenseRepository {
 //
 //        return debts;
     }
+
+
 }

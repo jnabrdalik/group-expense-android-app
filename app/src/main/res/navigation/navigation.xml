@@ -23,25 +23,10 @@
             android:name="groupId"
             app:argType="long" />
         <action
-            android:id="@+id/action_groupFragment_to_expenseDetailsFragment"
-            app:destination="@id/expenseDetailsFragment" />
-        <action
             android:id="@+id/action_groupFragment_to_personDetailsFragment"
             app:destination="@id/personDetailsFragment" />
         <action
             android:id="@+id/action_groupFragment_to_addExpenseFragment"
-            app:destination="@id/addExpenseFragment" />
-    </fragment>
-    <fragment
-        tools:layout="@layout/expense_details_fragment"
-        android:id="@+id/expenseDetailsFragment"
-        android:name="com.example.groupexpenseapp.ui.fragment.ExpenseDetailsFragment"
-        android:label="ExpenseDetailsFragment" >
-        <argument
-            android:name="expenseId"
-            app:argType="long" />
-        <action
-            android:id="@+id/action_expenseDetailsFragment_to_addExpenseFragment"
             app:destination="@id/addExpenseFragment" />
     </fragment>
     <fragment

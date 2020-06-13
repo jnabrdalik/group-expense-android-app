@@ -15,13 +15,14 @@ import org.threeten.bp.OffsetDateTime;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 public class DebtListViewModel extends AndroidViewModel {
     private ExpenseRepository repository;
     private LiveData<List<Debt>> debts;
-    private List<Debt> selectedItems = new ArrayList<>();
+    private Set<Debt> selectedItems = new HashSet<>();
 
     public DebtListViewModel(@NonNull Application application, long groupId) {
         super(application);
@@ -34,7 +35,7 @@ public class DebtListViewModel extends AndroidViewModel {
         return debts;
     }
 
-    public List<Debt> getSelectedItems() {
+    public Set<Debt> getSelectedItems() {
         return selectedItems;
     }
 

@@ -9,7 +9,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 
 import com.example.groupexpenseapp.db.entity.Expense;
-import com.example.groupexpenseapp.db.entity.ExpenseAndPayer;
 import com.example.groupexpenseapp.db.entity.ExpenseWithPeopleInvolved;
 import com.example.groupexpenseapp.db.entity.Person;
 import com.example.groupexpenseapp.repository.ExpenseRepository;

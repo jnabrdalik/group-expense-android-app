@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 
 import com.example.groupexpenseapp.R;
 import com.example.groupexpenseapp.databinding.DebtListFragmentBinding;
@@ -22,7 +23,9 @@ import com.example.groupexpenseapp.ui.adapter.DebtAdapter;
 import com.example.groupexpenseapp.viewmodel.DebtListViewModel;
 import com.example.groupexpenseapp.viewmodel.factory.DebtListViewModelFactory;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 public class DebtListFragment extends Fragment {
@@ -31,7 +34,7 @@ public class DebtListFragment extends Fragment {
     private DebtAdapter adapter;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.debt_list_fragment, container, false);
 
@@ -47,13 +50,18 @@ public class DebtListFragment extends Fragment {
         viewModel = new ViewModelProvider(this, factory)
                 .get(DebtListViewModel.class);
 
-        List<Debt> selectedItems = viewModel.getSelectedItems();
-        adapter = new DebtAdapter(selectedItems);
+        Set<Debt> selectedItems = viewModel.getSelectedItems();
+        CompoundButton.OnCheckedChangeListener onCheckedChangeListener = (buttonView, isChecked) ->
+                binding.buttonWrapper.setVisibility(selectedItems.isEmpty() ? View.GONE : View.VISIBLE);
+
+        adapter = new DebtAdapter(selectedItems, onCheckedChangeListener);
         binding.debts.setAdapter(adapter);
         binding.debts.addItemDecoration(new DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL));
 
-
-        binding.button.setOnClickListener(v -> viewModel.payDebts());
+        binding.button.setOnClickListener(v -> {
+            binding.buttonWrapper.setVisibility(View.GONE);
+            viewModel.payDebts();
+        });
 
         subscribeUi(viewModel.getDebts());
     }

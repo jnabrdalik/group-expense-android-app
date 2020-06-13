@@ -40,4 +40,13 @@ public class ExpenseWithPeopleInvolved {
     public List<Person> getPeopleInvolved() {
         return peopleInvolved;
     }
+
+    public String getListOfPeopleInvolvedNames() {
+        StringBuilder sb = new StringBuilder();
+        for (Person person : peopleInvolved)
+            sb.append(person.getName()).append(", ");
+
+        return sb.toString()
+                .substring(0, sb.length() - 2);
+    }
 }

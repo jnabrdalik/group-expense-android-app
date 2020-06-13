@@ -2,6 +2,8 @@ package com.example.groupexpenseapp.ui.adapter;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
@@ -13,16 +15,20 @@ import com.example.groupexpenseapp.databinding.DebtItemBinding;
 import com.example.groupexpenseapp.debt.Debt;
 import com.example.groupexpenseapp.ui.adapter.diffutil.DebtDiffUtil;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class DebtAdapter extends ListAdapter<Debt, DebtAdapter.DebtViewHolder> {
     //TODO change to hashset
-    private List<Debt> selectedItems;
+    private Set<Debt> selectedItems;
+    private CompoundButton.OnCheckedChangeListener onCheckedChangeListener;
 
-    public DebtAdapter(List<Debt> selectedItems) {
+    public DebtAdapter(Set<Debt> selectedItems, CompoundButton.OnCheckedChangeListener onCheckedChangeListener) {
         super(new DebtDiffUtil());
 
         this.selectedItems = selectedItems;
+        this.onCheckedChangeListener = onCheckedChangeListener;
     }
 
     @NonNull
@@ -40,13 +46,20 @@ public class DebtAdapter extends ListAdapter<Debt, DebtAdapter.DebtViewHolder> {
         Debt debt = getItem(position);
         holder.binding.setDebt(debt);
 
-        holder.binding.checkBox.setChecked(selectedItems.contains(debt));
-        holder.binding.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+        CheckBox checkBox = holder.binding.checkBox;
+
+
+        checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked)
                 selectedItems.add(debt);
             else
                 selectedItems.remove(debt);
+
+            onCheckedChangeListener.onCheckedChanged(buttonView, isChecked);
         });
+        checkBox.setChecked(selectedItems.contains(debt));
+
+        holder.binding.getRoot().setOnClickListener(v -> checkBox.toggle());
 
         holder.binding.executePendingBindings();
     }

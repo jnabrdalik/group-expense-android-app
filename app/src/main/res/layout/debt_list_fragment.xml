@@ -28,6 +28,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:contentPadding="@dimen/std_padding"
             app:cardElevation="30dp" >

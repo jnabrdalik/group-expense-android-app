@@ -5,22 +5,22 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
-import androidx.navigation.NavDirections;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.groupexpenseapp.R;
 import com.example.groupexpenseapp.databinding.ExpenseItemBinding;
-import com.example.groupexpenseapp.db.entity.ExpenseAndPayer;
-import com.example.groupexpenseapp.ui.adapter.diffutil.ExpenseAndPayerDiffUtil;
-import com.example.groupexpenseapp.ui.fragment.GroupDetailsFragmentDirections;
+import com.example.groupexpenseapp.db.entity.Expense;
+import com.example.groupexpenseapp.db.entity.ExpenseWithPeopleInvolved;
+import com.example.groupexpenseapp.ui.adapter.diffutil.ExpenseWithPeopleInvolvedDiffUtil;
 
-public class ExpenseAdapter extends ListAdapter<ExpenseAndPayer, ExpenseAdapter.ExpenseViewHolder> {
+public class ExpenseAdapter extends ListAdapter<ExpenseWithPeopleInvolved, ExpenseAdapter.ExpenseViewHolder> {
+    private OnHolderButtonsClickedListener onHolderButtonsClickedListener;
 
-    public ExpenseAdapter() {
-        super(new ExpenseAndPayerDiffUtil());
+    public ExpenseAdapter(OnHolderButtonsClickedListener onHolderButtonsClickedListener) {
+        super(new ExpenseWithPeopleInvolvedDiffUtil());
 
+        this.onHolderButtonsClickedListener = onHolderButtonsClickedListener;
         setHasStableIds(true);
     }
 
@@ -41,10 +41,11 @@ public class ExpenseAdapter extends ListAdapter<ExpenseAndPayer, ExpenseAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ExpenseViewHolder holder, int position) {
-        ExpenseAndPayer expenseAndPayer = getItem(position);
-        NavDirections directions = GroupDetailsFragmentDirections.actionGroupFragmentToExpenseDetailsFragment(expenseAndPayer.getExpense().getId());
-        holder.binding.setClickListener(v -> Navigation.findNavController(v).navigate(directions));
-        holder.binding.setExpenseAndPayer(expenseAndPayer);
+        ExpenseWithPeopleInvolved expenseWithPeopleInvolved = getItem(position);
+
+        holder.binding.setExpenseWithPeopleInvolved(expenseWithPeopleInvolved);
+        holder.binding.deleteExpense.setOnClickListener(v -> onHolderButtonsClickedListener.onDelete(expenseWithPeopleInvolved.getExpense()));
+        holder.binding.editExpense.setOnClickListener(v -> onHolderButtonsClickedListener.onEdit(expenseWithPeopleInvolved.getExpense()));
         holder.binding.executePendingBindings();
     }
 
@@ -56,5 +57,10 @@ public class ExpenseAdapter extends ListAdapter<ExpenseAndPayer, ExpenseAdapter.
 
             this.binding = binding;
         }
+    }
+
+    public interface OnHolderButtonsClickedListener {
+        void onEdit(Expense expense);
+        void onDelete(Expense expense);
     }
 }
