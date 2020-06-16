@@ -78,13 +78,10 @@ public class PersonListFragment extends Fragment {
 
         dialog.setOnShowListener(d -> {
             Button positiveButton = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+            Button negativeButton = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
             positiveButton.setEnabled(false);
 
-            // show keyboard
-            if (input.requestFocus()) {
-                InputMethodManager imm = (InputMethodManager) input.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-            }
+            showKeyboard(input);
 
             input.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -106,16 +103,20 @@ public class PersonListFragment extends Fragment {
             });
 
             positiveButton.setOnClickListener(v -> {
-                // hide keyboard
-                InputMethodManager imm = (InputMethodManager) input.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(input.getWindowToken(), 0);
+                hideKeyboard(input);
 
                 String personName = input.getText().toString().trim();
                 viewModel.addPerson(personName);
                 d.dismiss();
             });
+
+            negativeButton.setOnClickListener(v -> {
+                hideKeyboard(input);
+                d.dismiss();
+            });
         });
 
+        dialog.setCanceledOnTouchOutside(false);
         dialog.show();
     }
 
@@ -124,5 +125,17 @@ public class PersonListFragment extends Fragment {
             if (persons != null)
                 adapter.submitList(persons);
         });
+    }
+
+    private void hideKeyboard(View view) {
+        InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    private void showKeyboard(View view) {
+        if (view.requestFocus()) {
+            InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+        }
     }
 }

@@ -115,7 +115,12 @@ public class AddExpenseFragment extends Fragment {
                                 LocalDate.of(year, month + 1, dayOfMonth)
                                         .format(viewModel.formatter)), selectedDate.getYear(), selectedDate.getMonth().getValue() - 1, selectedDate.getDayOfMonth());
 
-        dateInput.setOnClickListener(v -> datePicker.show());
+        dateInput.setOnClickListener(v -> {
+            InputMethodManager imm = (InputMethodManager) dateInput.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(dateInput.getWindowToken(), 0);
+
+            datePicker.show();
+        });
     }
 
     private void setupAmountInput() {
@@ -147,7 +152,6 @@ public class AddExpenseFragment extends Fragment {
         EditText editText = textInputLayout.getEditText();
 
         if (editText.requestFocus()) {
-            // show keyboard
             InputMethodManager imm = (InputMethodManager) editText.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
         }

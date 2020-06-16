@@ -93,13 +93,10 @@ public class GroupListFragment extends Fragment {
 
         dialog.setOnShowListener(d -> {
             Button positiveButton = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+            Button negativeButton = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
             positiveButton.setEnabled(false);
 
-            if (input.requestFocus()) {
-                // show keyboard
-                InputMethodManager imm = (InputMethodManager) input.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-            }
+            showKeyboard(input);
 
             input.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -123,9 +120,7 @@ public class GroupListFragment extends Fragment {
                 String newGroupName = input.getText().toString().trim();
                 viewModel.addGroup(newGroupName).subscribe(groupId -> {
 
-                    // hide keyboard
-                    InputMethodManager imm = (InputMethodManager) input.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(input.getWindowToken(), 0);
+                    hideKeyboard(input);
 
                     NavDirections directions = GroupListFragmentDirections
                             .actionGroupListFragmentToGroupFragment(groupId);
@@ -134,9 +129,26 @@ public class GroupListFragment extends Fragment {
 
                 d.dismiss();
             });
+
+            negativeButton.setOnClickListener(v -> {
+                hideKeyboard(input);
+                d.dismiss();
+            });
         });
 
         dialog.show();
+    }
+
+    private void hideKeyboard(View view) {
+        InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    private void showKeyboard(View view) {
+        if (view.requestFocus()) {
+            InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+        }
     }
 
 }

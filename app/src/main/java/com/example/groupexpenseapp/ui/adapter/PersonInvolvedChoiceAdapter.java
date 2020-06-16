@@ -1,9 +1,11 @@
 package com.example.groupexpenseapp.ui.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
 
 import androidx.annotation.NonNull;
@@ -59,6 +61,10 @@ public class PersonInvolvedChoiceAdapter extends ListAdapter<Person, PersonInvol
                 selectedItemsIds.add(person.getId());
             else
                 selectedItemsIds.remove(person.getId());
+        });
+        holder.binding.checkBox.setOnClickListener(v -> {
+            InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
         });
 
         holder.binding.executePendingBindings();
