@@ -1,5 +1,6 @@
 package com.example.groupexpenseapp.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -50,18 +51,18 @@ public class DebtListFragment extends Fragment {
         viewModel = new ViewModelProvider(this, factory)
                 .get(DebtListViewModel.class);
 
-        Set<Debt> selectedItems = viewModel.getSelectedItems();
-        CompoundButton.OnCheckedChangeListener onCheckedChangeListener = (buttonView, isChecked) ->
-                binding.buttonWrapper.setVisibility(selectedItems.isEmpty() ? View.GONE : View.VISIBLE);
 
-        adapter = new DebtAdapter(selectedItems, onCheckedChangeListener);
+        adapter = new DebtAdapter(debt -> viewModel.removeDebt(debt), debt -> {
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, debt.getDebtor() + " -> " + debt.getCreditor());
+            sendIntent.setType("text/plain");
+
+            Intent shareIntent = Intent.createChooser(sendIntent, "Poinformuj znajomego o długu");
+            startActivity(shareIntent);
+        });
         binding.debts.setAdapter(adapter);
         binding.debts.addItemDecoration(new DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL));
-
-        binding.button.setOnClickListener(v -> {
-            binding.buttonWrapper.setVisibility(View.GONE);
-            viewModel.payDebts();
-        });
 
         subscribeUi(viewModel.getDebts());
     }

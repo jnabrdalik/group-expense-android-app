@@ -61,6 +61,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
+                    android:textColor="@{expenseWithPeopleInvolved.expense.description.equals(@string/payment) ? @color/colorPrimary : @color/black}"
                     android:layout_weight="3"
                     android:text="@{expenseWithPeopleInvolved.expense.description}"
                     android:textAppearance="?attr/textAppearanceHeadline5"
@@ -101,6 +102,7 @@
                     android:id="@+id/edit_expense"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    visibleGone="@{!expenseWithPeopleInvolved.expense.description.equals(@string/payment)}"
                     android:layout_marginRight="@dimen/std_padding"
                     android:background="@drawable/ic_edit" />
 

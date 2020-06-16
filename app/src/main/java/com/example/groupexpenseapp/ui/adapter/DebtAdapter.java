@@ -1,9 +1,8 @@
 package com.example.groupexpenseapp.ui.adapter;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
@@ -15,20 +14,15 @@ import com.example.groupexpenseapp.databinding.DebtItemBinding;
 import com.example.groupexpenseapp.debt.Debt;
 import com.example.groupexpenseapp.ui.adapter.diffutil.DebtDiffUtil;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 public class DebtAdapter extends ListAdapter<Debt, DebtAdapter.DebtViewHolder> {
-    //TODO change to hashset
-    private Set<Debt> selectedItems;
-    private CompoundButton.OnCheckedChangeListener onCheckedChangeListener;
+    private OnDebtClickListener onCheckClickListener;
+    private OnDebtClickListener onShareClickListener;
 
-    public DebtAdapter(Set<Debt> selectedItems, CompoundButton.OnCheckedChangeListener onCheckedChangeListener) {
+    public DebtAdapter(OnDebtClickListener onCheckClickListener, OnDebtClickListener onShareClickListener) {
         super(new DebtDiffUtil());
 
-        this.selectedItems = selectedItems;
-        this.onCheckedChangeListener = onCheckedChangeListener;
+        this.onCheckClickListener = onCheckClickListener;
+        this.onShareClickListener = onShareClickListener;
     }
 
     @NonNull
@@ -45,27 +39,14 @@ public class DebtAdapter extends ListAdapter<Debt, DebtAdapter.DebtViewHolder> {
     public void onBindViewHolder(@NonNull DebtViewHolder holder, int position) {
         Debt debt = getItem(position);
         holder.binding.setDebt(debt);
-
-        CheckBox checkBox = holder.binding.checkBox;
-
-
-        checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked)
-                selectedItems.add(debt);
-            else
-                selectedItems.remove(debt);
-
-            onCheckedChangeListener.onCheckedChanged(buttonView, isChecked);
-        });
-        checkBox.setChecked(selectedItems.contains(debt));
-
-        holder.binding.getRoot().setOnClickListener(v -> checkBox.toggle());
+        holder.binding.checkButton.setOnClickListener(v -> onCheckClickListener.onClick(debt));
+        holder.binding.shareButton.setOnClickListener(v -> onShareClickListener.onClick(debt));
 
         holder.binding.executePendingBindings();
     }
 
 
-    class DebtViewHolder extends RecyclerView.ViewHolder {
+    static class DebtViewHolder extends RecyclerView.ViewHolder {
         final DebtItemBinding binding;
 
         public DebtViewHolder(@NonNull DebtItemBinding binding) {
@@ -73,5 +54,9 @@ public class DebtAdapter extends ListAdapter<Debt, DebtAdapter.DebtViewHolder> {
 
             this.binding = binding;
         }
+    }
+
+    public interface OnDebtClickListener {
+        void onClick(Debt debt);
     }
 }

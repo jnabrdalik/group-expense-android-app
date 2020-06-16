@@ -15,6 +15,7 @@
     <string name="currency">zł</string>
     <string name="date_added">Dodano: %s</string>
     <string name="who_paid">Kto?</string>
+    <string name="payment">Spłata</string>
     <string name="for_whom">Za kogo?</string>
     <string name="when">Kiedy?</string>
     <string name="new_expense_title">Nowy wydatek</string>

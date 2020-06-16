@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import com.example.groupexpenseapp.R;
 import com.example.groupexpenseapp.db.entity.Expense;
 import com.example.groupexpenseapp.debt.Debt;
 import com.example.groupexpenseapp.repository.ExpenseRepository;
@@ -35,21 +36,14 @@ public class DebtListViewModel extends AndroidViewModel {
         return debts;
     }
 
-    public Set<Debt> getSelectedItems() {
-        return selectedItems;
-    }
-
     public void resetSelection() {
         selectedItems.clear();
     }
 
-    public void payDebts() {
-        for (Debt debt : selectedItems) {
-            // TODO make seperate class (or Expense subclass) for payments
-            int groupId = debt.getCreditor().getGroupId();
-            Expense expense = new Expense(debt.getAmount(), "SPŁATA", OffsetDateTime.now(), LocalDate.now(), groupId, debt.getDebtor().getId());
-            Set<Integer> set = Collections.singleton(debt.getCreditor().getId());
-            repository.updateOrInsertExpenseWithPeopleInvolved(expense, set, Collections.EMPTY_SET);
-        }
+    public void removeDebt(Debt debt) {
+        int groupId = debt.getCreditor().getGroupId();
+        Expense expense = new Expense(debt.getAmount(), getApplication().getResources().getString(R.string.payment), OffsetDateTime.now(), LocalDate.now(), groupId, debt.getDebtor().getId());
+        Set<Integer> set = Collections.singleton(debt.getCreditor().getId());
+        repository.updateOrInsertExpenseWithPeopleInvolved(expense, set, Collections.EMPTY_SET);
     }
 }

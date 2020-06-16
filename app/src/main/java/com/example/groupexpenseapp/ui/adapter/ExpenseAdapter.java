@@ -46,6 +46,7 @@ public class ExpenseAdapter extends ListAdapter<ExpenseWithPeopleInvolved, Expen
         holder.binding.setExpenseWithPeopleInvolved(expenseWithPeopleInvolved);
         holder.binding.deleteExpense.setOnClickListener(v -> onHolderButtonsClickedListener.onDelete(expenseWithPeopleInvolved.getExpense()));
         holder.binding.editExpense.setOnClickListener(v -> onHolderButtonsClickedListener.onEdit(expenseWithPeopleInvolved.getExpense()));
+
         holder.binding.executePendingBindings();
     }
 
