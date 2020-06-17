@@ -1,6 +1,7 @@
 package com.example.groupexpenseapp.ui.adapter;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -15,9 +16,12 @@ import com.example.groupexpenseapp.ui.adapter.diffutil.PersonDiffUtil;
 
 
 public class PersonAdapter extends ListAdapter<Person, PersonAdapter.PersonViewHolder> {
+    private OnPersonClickListener listener;
 
-    public PersonAdapter() {
+    public PersonAdapter(OnPersonClickListener listener) {
         super(new PersonDiffUtil());
+
+        this.listener = listener;
 
         setHasStableIds(true);
     }
@@ -41,6 +45,9 @@ public class PersonAdapter extends ListAdapter<Person, PersonAdapter.PersonViewH
     public void onBindViewHolder(@NonNull PersonViewHolder holder, int position) {
         Person person = getItem(position);
         holder.binding.setPerson(person);
+        holder.binding.editPerson.setOnClickListener(v -> listener.onEdit(person));
+        holder.binding.deletePerson.setOnClickListener(v -> listener.onDelete(person));
+
         holder.binding.executePendingBindings();
     }
 
@@ -52,6 +59,11 @@ public class PersonAdapter extends ListAdapter<Person, PersonAdapter.PersonViewH
 
             this.binding = binding;
         }
+    }
+
+    public interface OnPersonClickListener {
+        void onEdit(Person person);
+        void onDelete(Person person);
     }
 }
 

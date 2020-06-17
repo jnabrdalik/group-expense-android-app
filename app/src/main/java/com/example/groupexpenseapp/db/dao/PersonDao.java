@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Transaction;
 import androidx.room.Update;
@@ -15,11 +16,8 @@ import java.util.List;
 
 @Dao
 public abstract class PersonDao {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     public abstract long insert(Person person);
-
-    @Update
-    public abstract void update(Person person);
 
     @Delete
     abstract void delete(Person person);

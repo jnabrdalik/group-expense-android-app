@@ -22,7 +22,23 @@
             tools:text="Andrzej"
             android:textAppearance="?attr/textAppearanceHeadline5"
             android:layout_weight="3"
+            android:textColor="@{person.name.equals(@string/me) ? @color/colorPrimary : @color/black}"
             android:text="@{person.name}"/>
+
+        <ImageButton
+            android:id="@+id/edit_person"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            visibleGone="@{!person.name.equals(@string/me)}"
+            android:layout_marginRight="@dimen/std_padding"
+            android:background="@drawable/ic_edit" />
+
+        <ImageButton
+            android:id="@+id/delete_person"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            visibleGone="@{!person.name.equals(@string/me)}"
+            android:background="@drawable/ic_delete" />
 
 
     </LinearLayout>

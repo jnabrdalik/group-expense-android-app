@@ -20,6 +20,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import io.reactivex.Single;
+
 public class DebtListViewModel extends AndroidViewModel {
     private ExpenseRepository repository;
     private LiveData<List<Debt>> debts;
@@ -40,10 +42,14 @@ public class DebtListViewModel extends AndroidViewModel {
         selectedItems.clear();
     }
 
-    public void removeDebt(Debt debt) {
+    public Single<Long> removeDebt(Debt debt) {
         int groupId = debt.getCreditor().getGroupId();
         Expense expense = new Expense(debt.getAmount(), getApplication().getResources().getString(R.string.payment), OffsetDateTime.now(), LocalDate.now(), groupId, debt.getDebtor().getId());
         Set<Integer> set = Collections.singleton(debt.getCreditor().getId());
-        repository.updateOrInsertExpenseWithPeopleInvolved(expense, set, Collections.EMPTY_SET);
+        return repository.updateOrInsertExpenseWithPeopleInvolved(expense, set, Collections.EMPTY_SET);
+    }
+
+    public void deleteExpense(long expenseId) {
+        repository.deleteExpense(expenseId);
     }
 }

@@ -92,7 +92,12 @@ public class AddExpenseFragment extends Fragment {
     private void setupToolbar() {
         MaterialToolbar toolbar = binding.toolbar;
 
-        toolbar.setNavigationOnClickListener(v -> requireActivity().onBackPressed());
+        toolbar.setNavigationOnClickListener(v -> {
+            InputMethodManager imm = (InputMethodManager) requireView().getRootView().getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(requireView().getRootView().getWindowToken(), 0);
+            requireActivity().onBackPressed();
+        });
+
         toolbar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.save_expense) {
                 if (viewModel.areAllFieldsSet()) {

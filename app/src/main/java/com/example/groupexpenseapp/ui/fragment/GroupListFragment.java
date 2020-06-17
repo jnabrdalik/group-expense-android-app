@@ -12,9 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -32,7 +30,6 @@ import com.example.groupexpenseapp.db.entity.Group;
 import com.example.groupexpenseapp.db.entity.GroupWithSummary;
 import com.example.groupexpenseapp.ui.adapter.GroupAdapter;
 import com.example.groupexpenseapp.viewmodel.GroupListViewModel;
-import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.List;
 
@@ -121,6 +118,8 @@ public class GroupListFragment extends Fragment {
                 viewModel.addGroup(newGroupName).subscribe(groupId -> {
 
                     hideKeyboard(input);
+
+                    viewModel.addMeToGroup(groupId);
 
                     NavDirections directions = GroupListFragmentDirections
                             .actionGroupListFragmentToGroupFragment(groupId);

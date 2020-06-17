@@ -23,16 +23,9 @@
             android:name="groupId"
             app:argType="long" />
         <action
-            android:id="@+id/action_groupFragment_to_personDetailsFragment"
-            app:destination="@id/personDetailsFragment" />
-        <action
             android:id="@+id/action_groupFragment_to_addExpenseFragment"
             app:destination="@id/addExpenseFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/personDetailsFragment"
-        android:name="com.example.groupexpenseapp.ui.fragment.PersonDetailsFragment"
-        android:label="PersonDetailsFragment" />
     <fragment
         android:id="@+id/addExpenseFragment"
         android:name="com.example.groupexpenseapp.ui.fragment.AddExpenseFragment"

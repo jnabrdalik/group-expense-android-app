@@ -6,9 +6,12 @@ import androidx.lifecycle.LiveData;
 
 import com.example.groupexpenseapp.db.AppDatabase;
 import com.example.groupexpenseapp.db.dao.PersonDao;
+import com.example.groupexpenseapp.db.entity.Group;
 import com.example.groupexpenseapp.db.entity.Person;
 
 import java.util.List;
+
+import io.reactivex.Single;
 
 public class PersonRepository {
     private static PersonRepository INSTANCE;
@@ -27,9 +30,7 @@ public class PersonRepository {
 
     private PersonDao personDao;
     private LiveData<List<Person>> groupPeople;
-    private LiveData<List<Person>> peopleInvolvedInExpense;
     private long currentGroupId;
-    private long currentExpenseId;
 
     private PersonRepository(Application application) {
         AppDatabase database = AppDatabase.getInstance(application);
@@ -45,16 +46,15 @@ public class PersonRepository {
         return groupPeople;
     }
 
-    public LiveData<List<Person>> getPeopleInvolvedInExpense(long expenseId) {
-        if (currentExpenseId != expenseId) {
-            currentExpenseId = expenseId;
-            peopleInvolvedInExpense = personDao.getPeopleOwingForExpense(expenseId);
-        }
-
-        return peopleInvolvedInExpense;
+    public void updateOrInsertPerson(Person person) {
+        AppDatabase.executorService.execute(() -> personDao.insert(person));
     }
 
-    public void addPerson(Person person) {
-        AppDatabase.executorService.execute(() -> personDao.insert(person));
+    public Single<Boolean> deletePerson(Person person) {
+        return Single.fromFuture(
+                AppDatabase.executorService.submit(
+                        () -> personDao.deleteWithCheck(person)
+                )
+        );
     }
 }

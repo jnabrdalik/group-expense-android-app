@@ -22,4 +22,5 @@
     <string name="edit">Edytuj</string>
     <string name="delete">Usuń</string>
     <string name="mark_as_paid">Oznacz wybrane jako zapłacone</string>
+    <string name="me">Ja</string>
 </resources>

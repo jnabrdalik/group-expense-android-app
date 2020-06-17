@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Transaction;
 import androidx.room.Update;
@@ -16,11 +17,8 @@ import java.util.Set;
 
 @Dao
 public abstract class ExpenseDao {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     public abstract long insert(Expense expense);
-
-    @Update
-    public abstract void update(Expense expense);
 
     @Delete
     public abstract void delete(Expense expense);
@@ -30,19 +28,16 @@ public abstract class ExpenseDao {
     public abstract LiveData<ExpenseWithPeopleInvolved> getExpenseWithPeopleInvolved(long expenseId);
 
     @Transaction
-    public void updateOrInsertExpense(Expense expense, Set<Integer> peopleAddedIds, Set<Integer> peopleRemovedIds) {
-        int expenseId = expense.getId();
-
-        if (expenseId == 0)
-            expenseId = (int) insert(expense);
-        else
-            update(expense);
+    public long updateOrInsertExpense(Expense expense, Set<Integer> peopleAddedIds, Set<Integer> peopleRemovedIds) {
+        int expenseId = (int) insert(expense);
 
         for (int personId : peopleRemovedIds)
             deletePersonOwing(expenseId, personId);
 
         for (int personId : peopleAddedIds)
             insertPersonOwing(expenseId, personId);
+
+        return expenseId;
     }
 
 
@@ -63,4 +58,7 @@ public abstract class ExpenseDao {
     @Transaction
     @Query("select * from expenses where group_id = :groupId order by amount asc")
     public abstract LiveData<List<ExpenseWithPeopleInvolved>> getExpensesWithPeopleInvolvedFromGroupMostExpensiveFirst(long groupId);
+
+    @Query("delete from expenses where id = :expenseId")
+    public abstract void deleteById(long expenseId);
 }

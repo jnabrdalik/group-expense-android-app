@@ -11,6 +11,8 @@ import com.example.groupexpenseapp.repository.PersonRepository;
 
 import java.util.List;
 
+import io.reactivex.Single;
+
 public class PersonListViewModel extends AndroidViewModel {
     private LiveData<List<Person>> people;
     private PersonRepository repository;
@@ -41,6 +43,15 @@ public class PersonListViewModel extends AndroidViewModel {
 
     public void addPerson(String personName) {
         Person person = new Person(personName, (int) groupId);
-        repository.addPerson(person);
+        repository.updateOrInsertPerson(person);
+    }
+
+    public void updatePerson(Person person, String name) {
+        person.setName(name);
+        repository.updateOrInsertPerson(person);
+    }
+
+    public Single<Boolean> deletePerson(Person person) {
+        return repository.deletePerson(person);
     }
 }

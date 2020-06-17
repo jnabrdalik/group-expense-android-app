@@ -1,6 +1,5 @@
 package com.example.groupexpenseapp.ui.adapter;
 
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -15,14 +14,12 @@ import com.example.groupexpenseapp.debt.Debt;
 import com.example.groupexpenseapp.ui.adapter.diffutil.DebtDiffUtil;
 
 public class DebtAdapter extends ListAdapter<Debt, DebtAdapter.DebtViewHolder> {
-    private OnDebtClickListener onCheckClickListener;
-    private OnDebtClickListener onShareClickListener;
+    private OnDebtClickListener onDebtClickListener;
 
-    public DebtAdapter(OnDebtClickListener onCheckClickListener, OnDebtClickListener onShareClickListener) {
+    public DebtAdapter(OnDebtClickListener onDebtClickListener) {
         super(new DebtDiffUtil());
 
-        this.onCheckClickListener = onCheckClickListener;
-        this.onShareClickListener = onShareClickListener;
+        this.onDebtClickListener = onDebtClickListener;
     }
 
     @NonNull
@@ -39,8 +36,11 @@ public class DebtAdapter extends ListAdapter<Debt, DebtAdapter.DebtViewHolder> {
     public void onBindViewHolder(@NonNull DebtViewHolder holder, int position) {
         Debt debt = getItem(position);
         holder.binding.setDebt(debt);
-        holder.binding.checkButton.setOnClickListener(v -> onCheckClickListener.onClick(debt));
-        holder.binding.shareButton.setOnClickListener(v -> onShareClickListener.onClick(debt));
+        holder.binding.checkButton.setOnClickListener(v -> onDebtClickListener.onCheck(debt));
+        holder.binding.getRoot().setOnLongClickListener(v -> {
+            onDebtClickListener.onShare(debt);
+            return true;
+        });
 
         holder.binding.executePendingBindings();
     }
@@ -57,6 +57,7 @@ public class DebtAdapter extends ListAdapter<Debt, DebtAdapter.DebtViewHolder> {
     }
 
     public interface OnDebtClickListener {
-        void onClick(Debt debt);
+        void onCheck(Debt debt);
+        void onShare(Debt debt);
     }
 }

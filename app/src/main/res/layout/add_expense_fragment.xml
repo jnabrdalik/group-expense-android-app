@@ -22,8 +22,8 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/colorPrimary"
-            app:menu="@menu/add_expense_menu"
             app:navigationIcon="@drawable/ic_close"
+            app:menu="@menu/add_expense_menu"
             app:title="@string/new_expense_title" >
         </com.google.android.material.appbar.MaterialToolbar>
 
@@ -92,8 +92,7 @@
             android:layout_height="wrap_content"
             android:editable="false"
             android:hint="@string/when"
-            android:paddingHorizontal="@dimen/std_padding"
-            android:paddingTop="@dimen/std_padding">
+            android:padding="@dimen/std_padding">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/date_input"
@@ -104,14 +103,12 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="@dimen/std_padding"
-            android:paddingTop="@dimen/std_padding"
+            android:padding="@dimen/std_padding"
             android:text="@string/for_whom"
-            android:textAppearance="?attr/textAppearanceSubtitle1"
+            android:textAppearance="?attr/textAppearanceBody1"
             tools:text="Za kogo?" />
 
         <androidx.recyclerview.widget.RecyclerView

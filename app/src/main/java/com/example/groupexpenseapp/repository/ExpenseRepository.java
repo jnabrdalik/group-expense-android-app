@@ -50,11 +50,12 @@ public class ExpenseRepository {
         );
     }
 
-    public void updateOrInsertExpenseWithPeopleInvolved(Expense expense, Set<Integer> selectedIds, Set<Integer> previouslySelectedIds) {
-        AppDatabase.executorService.execute(() -> {
-            // TODO
-            expenseDao.updateOrInsertExpense(expense, selectedIds, previouslySelectedIds);
-        });
+    public Single<Long> updateOrInsertExpenseWithPeopleInvolved(Expense expense, Set<Integer> selectedIds, Set<Integer> previouslySelectedIds) {
+        return Single.fromFuture(
+                AppDatabase.executorService.submit(
+                        () -> expenseDao.updateOrInsertExpense(expense, selectedIds, previouslySelectedIds)
+                )
+        );
     }
 
     public LiveData<ExpenseWithPeopleInvolved> getExpenseWithPeopleInvolved(long expenseId) {
@@ -84,16 +85,9 @@ public class ExpenseRepository {
             });
             return debts;
         });
-
-//        MutableLiveData<List<Debt>> debts = new MutableLiveData<>();
-//
-//        AppDatabase.executorService.execute(() -> {
-//            DebtResolver resolver = new DebtResolver(expenseDao.getExpensesAndPeopleInvolvedSync(groupId));
-//            debts.postValue(resolver.getDebts());
-//        });
-//
-//        return debts;
     }
 
-
+    public void deleteExpense(long expenseId) {
+        AppDatabase.executorService.execute(() -> expenseDao.deleteById(expenseId));
+    }
 }

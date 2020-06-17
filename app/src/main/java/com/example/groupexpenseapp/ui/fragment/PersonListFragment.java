@@ -30,6 +30,7 @@ import com.example.groupexpenseapp.db.entity.Person;
 import com.example.groupexpenseapp.ui.adapter.PersonAdapter;
 import com.example.groupexpenseapp.viewmodel.PersonListViewModel;
 import com.example.groupexpenseapp.viewmodel.factory.PersonListViewModelFactory;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
@@ -56,21 +57,38 @@ public class PersonListFragment extends Fragment {
         viewModel = new ViewModelProvider(this, factory)
                 .get(PersonListViewModel.class);
 
-        adapter = new PersonAdapter();
+        adapter = new PersonAdapter(new PersonAdapter.OnPersonClickListener() {
+            @Override
+            public void onEdit(Person person) {
+                displayAddOrEditPersonDialog(person);
+            }
+
+            @Override
+            public void onDelete(Person person) {
+                viewModel.deletePerson(person).subscribe(success -> {
+                    if (!success)
+                        Snackbar.make(binding.getRoot(), "Nie można usunąć osoby, jeśli istnieją powiązane z nią wydatki", Snackbar.LENGTH_SHORT)
+                                .setAction("Ok", v -> {})
+                                .show();
+                }).dispose();
+
+
+            }
+        });
         binding.people.setAdapter(adapter);
         binding.people.addItemDecoration(new DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL));
-        binding.addGroupButton.setOnClickListener(v -> displayAddPersonDialog());
+        binding.addGroupButton.setOnClickListener(v -> displayAddOrEditPersonDialog(null));
 
         subscribeUi(viewModel.getPeople());
     }
 
-    private void displayAddPersonDialog() {
+    private void displayAddOrEditPersonDialog(Person person) {
         AddPersonDialogBinding binding = DataBindingUtil.inflate(getLayoutInflater(),
                 R.layout.add_person_dialog, null, false);
         AlertDialog dialog = new AlertDialog.Builder(requireContext())
                 .setView(binding.getRoot())
-                .setTitle("Dodaj osobę")
-                .setPositiveButton("Dodaj", null)
+                .setTitle(person == null ? "Dodaj osobę" : "Edytuj osobę")
+                .setPositiveButton("Zapisz", null)
                 .setNegativeButton("Anuluj", null)
                 .create();
 
@@ -102,11 +120,22 @@ public class PersonListFragment extends Fragment {
                 }
             });
 
+            if (person != null) {
+                String name = person.getName();
+                input.setText(name);
+                input.setSelection(name.length());
+            }
+
             positiveButton.setOnClickListener(v -> {
                 hideKeyboard(input);
 
                 String personName = input.getText().toString().trim();
-                viewModel.addPerson(personName);
+
+                if (person == null)
+                    viewModel.addPerson(personName);
+                else
+                    viewModel.updatePerson(person, personName);
+
                 d.dismiss();
             });
 

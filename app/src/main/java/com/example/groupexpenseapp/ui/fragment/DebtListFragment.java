@@ -23,6 +23,7 @@ import com.example.groupexpenseapp.debt.Debt;
 import com.example.groupexpenseapp.ui.adapter.DebtAdapter;
 import com.example.groupexpenseapp.viewmodel.DebtListViewModel;
 import com.example.groupexpenseapp.viewmodel.factory.DebtListViewModelFactory;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.HashSet;
 import java.util.List;
@@ -51,16 +52,28 @@ public class DebtListFragment extends Fragment {
         viewModel = new ViewModelProvider(this, factory)
                 .get(DebtListViewModel.class);
 
+        adapter = new DebtAdapter(new DebtAdapter.OnDebtClickListener() {
+            @Override
+            public void onCheck(Debt debt) {
+                viewModel.removeDebt(debt).subscribe(expenseId -> {
+                    Snackbar.make(requireView(), "Oznaczono dług jako rozliczony", Snackbar.LENGTH_SHORT)
+                            .setAction("Cofnij", v -> viewModel.deleteExpense(expenseId))
+                            .show();
+                }).dispose();
+            }
 
-        adapter = new DebtAdapter(debt -> viewModel.removeDebt(debt), debt -> {
-            Intent sendIntent = new Intent();
-            sendIntent.setAction(Intent.ACTION_SEND);
-            sendIntent.putExtra(Intent.EXTRA_TEXT, debt.getDebtor() + " -> " + debt.getCreditor());
-            sendIntent.setType("text/plain");
+            @Override
+            public void onShare(Debt debt) {
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, debt.getDebtor() + " -> " + debt.getCreditor());
+                sendIntent.setType("text/plain");
 
-            Intent shareIntent = Intent.createChooser(sendIntent, "Poinformuj znajomego o długu");
-            startActivity(shareIntent);
+                Intent shareIntent = Intent.createChooser(sendIntent, "Poinformuj znajomego o długu");
+                startActivity(shareIntent);
+            }
         });
+
         binding.debts.setAdapter(adapter);
         binding.debts.addItemDecoration(new DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL));
 
