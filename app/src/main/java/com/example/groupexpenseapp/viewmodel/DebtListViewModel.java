@@ -14,9 +14,7 @@ import com.example.groupexpenseapp.repository.ExpenseRepository;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.OffsetDateTime;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -25,7 +23,6 @@ import io.reactivex.Single;
 public class DebtListViewModel extends AndroidViewModel {
     private ExpenseRepository repository;
     private LiveData<List<Debt>> debts;
-    private Set<Debt> selectedItems = new HashSet<>();
 
     public DebtListViewModel(@NonNull Application application, long groupId) {
         super(application);
@@ -36,10 +33,6 @@ public class DebtListViewModel extends AndroidViewModel {
 
     public LiveData<List<Debt>> getDebts() {
         return debts;
-    }
-
-    public void resetSelection() {
-        selectedItems.clear();
     }
 
     public Single<Long> removeDebt(Debt debt) {

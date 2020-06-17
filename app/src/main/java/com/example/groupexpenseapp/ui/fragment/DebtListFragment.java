@@ -82,12 +82,10 @@ public class DebtListFragment extends Fragment {
 
     private void subscribeUi(LiveData<List<Debt>> debts) {
         debts.observe(getViewLifecycleOwner(), next -> {
-            viewModel.resetSelection();
             if (next != null) {
                 adapter.submitList(next);
                 binding.debts.setItemViewCacheSize(next.size());
             }
-
         });
     }
 }

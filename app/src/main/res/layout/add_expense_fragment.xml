@@ -112,7 +112,7 @@
             tools:text="Za kogo?" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/for_whom_choice"
+            android:id="@+id/people_involved_choice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />

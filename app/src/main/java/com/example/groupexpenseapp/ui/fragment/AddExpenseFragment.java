@@ -6,17 +6,14 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -24,7 +21,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.groupexpenseapp.R;
 import com.example.groupexpenseapp.databinding.AddExpenseFragmentBinding;
-import com.example.groupexpenseapp.db.entity.Expense;
 import com.example.groupexpenseapp.db.entity.Person;
 import com.example.groupexpenseapp.ui.adapter.PersonInvolvedChoiceAdapter;
 import com.example.groupexpenseapp.viewmodel.AddExpenseViewModel;
@@ -69,9 +65,7 @@ public class AddExpenseFragment extends Fragment {
         setupDescriptionInput();
         setupAmountInput();
         setupPayerInput(binding.payer);
-
         setupPeopleInvolvedSelection();
-
         subscribeUi();
 
         long expenseId = args.getExpenseId();
@@ -79,6 +73,7 @@ public class AddExpenseFragment extends Fragment {
             viewModel.getExpenseWithPeopleInvolved(expenseId).observe(getViewLifecycleOwner(), next -> {
                 viewModel.setExpense(next);
                 binding.setViewmodel(viewModel);
+                adapter.notifyDataSetChanged();
                 setupDateInput(binding.dateInput);
             });
         }
@@ -92,11 +87,7 @@ public class AddExpenseFragment extends Fragment {
     private void setupToolbar() {
         MaterialToolbar toolbar = binding.toolbar;
 
-        toolbar.setNavigationOnClickListener(v -> {
-            InputMethodManager imm = (InputMethodManager) requireView().getRootView().getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(requireView().getRootView().getWindowToken(), 0);
-            requireActivity().onBackPressed();
-        });
+        toolbar.setNavigationOnClickListener(v -> requireActivity().onBackPressed());
 
         toolbar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.save_expense) {
@@ -121,7 +112,7 @@ public class AddExpenseFragment extends Fragment {
                                         .format(viewModel.formatter)), selectedDate.getYear(), selectedDate.getMonth().getValue() - 1, selectedDate.getDayOfMonth());
 
         dateInput.setOnClickListener(v -> {
-            InputMethodManager imm = (InputMethodManager) dateInput.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(dateInput.getWindowToken(), 0);
 
             datePicker.show();
@@ -135,8 +126,15 @@ public class AddExpenseFragment extends Fragment {
             if (!hasFocus) {
                 String content = editText.getText().toString();
 
-                if (!content.contains("."))
-                    content = content + ".00";
+                int dotIndex = content.indexOf('.');
+                if (!content.isEmpty()) {
+                    if (dotIndex == -1)
+                        content = content + ".00";
+                    else if (dotIndex == content.length() - 1)
+                        content = content + "00";
+                    else if (dotIndex == content.length() - 2)
+                        content = content + "0";
+                }
 
                 editText.setText(content);
 
@@ -150,13 +148,38 @@ public class AddExpenseFragment extends Fragment {
             }
         });
 
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String text = s.toString();
+
+                int dotIndex = text.indexOf('.');
+                if (dotIndex != -1 && text.length() > dotIndex + 1 + 2) {
+                    editText.setText(text.substring(0, dotIndex + 3));
+
+                    if (editText.hasFocus())
+                        editText.setSelection(text.length() - 1);
+                }
+            }
+        });
+
     }
-    // TODO can't type if launched for the second time
+
     private void setupDescriptionInput() {
         TextInputLayout textInputLayout = binding.expenseDescr;
         EditText editText = textInputLayout.getEditText();
 
-        if (editText.requestFocus()) {
+        if (AddExpenseFragmentArgs.fromBundle(requireArguments()).getExpenseId() == 0 && editText.requestFocus()) {
             InputMethodManager imm = (InputMethodManager) editText.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
         }
@@ -202,7 +225,7 @@ public class AddExpenseFragment extends Fragment {
     }
 
     private void setupPeopleInvolvedSelection() {
-        RecyclerView recyclerView = binding.forWhomChoice;
+        RecyclerView recyclerView = binding.peopleInvolvedChoice;
         adapter = new PersonInvolvedChoiceAdapter(viewModel.getSelectedItemIds());
         recyclerView.setAdapter(adapter);
     }
@@ -215,8 +238,18 @@ public class AddExpenseFragment extends Fragment {
                adapter.submitList(people);
 
                // easiest way for items to stay selected when off-screen
-               binding.forWhomChoice.setItemViewCacheSize(people.size());
+               binding.peopleInvolvedChoice.setItemViewCacheSize(people.size());
             }
         });
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+
+        InputMethodManager imm = (InputMethodManager) requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        View currentFocus = requireActivity().getCurrentFocus();
+        if (currentFocus != null)
+            imm.hideSoftInputFromWindow(currentFocus.getWindowToken(), 0);
     }
 }

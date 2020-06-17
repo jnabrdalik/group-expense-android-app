@@ -49,6 +49,7 @@ public class PersonInvolvedChoiceAdapter extends ListAdapter<Person, PersonInvol
         return new PersonInvolvedChoiceViewHolder(binding);
     }
 
+
     @Override
     public void onBindViewHolder(@NonNull PersonInvolvedChoiceViewHolder holder, int position) {
         Person person = getItem(position);
