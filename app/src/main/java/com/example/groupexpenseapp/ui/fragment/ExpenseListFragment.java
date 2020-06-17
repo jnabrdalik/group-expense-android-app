@@ -66,6 +66,8 @@ public class ExpenseListFragment extends Fragment {
         adapter = new ExpenseAdapter(listener);
         binding.expenses.setAdapter(adapter);
         binding.expenses.addItemDecoration(new DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL));
+        binding.setLifecycleOwner(getViewLifecycleOwner());
+        binding.setViewmodel(viewModel);
 
         NavDirections directions = GroupDetailsFragmentDirections.actionGroupFragmentToAddExpenseFragment(groupId);
         binding.addGroupButton.setOnClickListener(v -> Navigation.findNavController(v).navigate(directions));

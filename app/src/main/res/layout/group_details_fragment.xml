@@ -24,7 +24,8 @@
                 android:layout_height="?attr/actionBarSize"
                 app:navigationIcon="@drawable/ic_arrow_back"
                 tools:title="Wyjazd"
-                app:title="@{viewmodel.group.name}" />
+                app:title="@{viewmodel.group.name}"
+                app:subtitle="@{viewmodel.group.formattedTimeCreated}"/>
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/group_tabs"

@@ -76,6 +76,8 @@ public class DebtListFragment extends Fragment {
 
         binding.debts.setAdapter(adapter);
         binding.debts.addItemDecoration(new DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL));
+        binding.setLifecycleOwner(getViewLifecycleOwner());
+        binding.setViewmodel(viewModel);
 
         subscribeUi(viewModel.getDebts());
     }

@@ -39,7 +39,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="5"
-                    android:text="@{@string/payer_paid(expenseWithPeopleInvolved.payer.name)}"
+                    android:text="@{expenseWithPeopleInvolved.payer.name.equals(@string/me) ? @string/i_paid : @string/payer_paid(expenseWithPeopleInvolved.payer.name)}"
                     android:textAlignment="textEnd"
                     android:textAppearance="?attr/textAppearanceCaption"
                     tools:text="Sebastian zapłacił(a)" />
