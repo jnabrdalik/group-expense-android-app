@@ -35,7 +35,7 @@ public class GroupListViewModel extends AndroidViewModel {
 
     public Single<Long> addGroup(String name) {
         Group group = new Group(name, OffsetDateTime.now());
-        return groupRepository.addGroup(group);
+        return groupRepository.insertGroup(group);
     }
 
     public void deleteGroup(Group group) {
@@ -50,5 +50,10 @@ public class GroupListViewModel extends AndroidViewModel {
         String me = getApplication().getResources().getString(R.string.me);
 
         personRepository.updateOrInsertPerson(new Person(me, (int) groupId));
+    }
+
+    public void updateGroup(Group group, String newGroupName) {
+        group.setName(newGroupName);
+        groupRepository.updateGroup(group);
     }
 }

@@ -15,16 +15,15 @@ import com.example.groupexpenseapp.databinding.GroupItemBinding;
 import com.example.groupexpenseapp.db.entity.Group;
 import com.example.groupexpenseapp.db.entity.GroupWithSummary;
 import com.example.groupexpenseapp.ui.fragment.GroupListFragmentDirections;
-import com.example.groupexpenseapp.ui.GroupLongClickCallback;
 
 import java.util.List;
 // TODO switch to ListAdapter
 public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHolder> {
-    GroupLongClickCallback longClickCallback;
+    GroupClickListener groupClickListener;
     private List<GroupWithSummary> groups;
 
-    public GroupAdapter(GroupLongClickCallback longClickCallback) {
-        this.longClickCallback = longClickCallback;
+    public GroupAdapter(GroupClickListener groupClickListener) {
+        this.groupClickListener = groupClickListener;
         setHasStableIds(true);
     }
 
@@ -84,16 +83,14 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
 
     @Override
     public void onBindViewHolder(@NonNull GroupViewHolder holder, int position) {
-        GroupWithSummary group = groups.get(position);
-        NavDirections directions = GroupListFragmentDirections.actionGroupListFragmentToGroupFragment(group.getGroup().getId());
-        holder.binding.setClickListener(v -> Navigation.findNavController(v).navigate(directions));
-        holder.binding.groupCardView.setOnLongClickListener(view -> {
-            longClickCallback.onLongClick(group);
-            return true;
-        });
-        holder.binding.setGroup(group.getGroup());
-        holder.binding.setExpenseSum(group.getExpenseSum());
-        holder.binding.setPersonCount(group.getPersonCount());
+        GroupWithSummary groupWithSummary = groups.get(position);
+        NavDirections directions = GroupListFragmentDirections.actionGroupListFragmentToGroupFragment(groupWithSummary.getGroup().getId());
+        holder.binding.details.setOnClickListener(v -> Navigation.findNavController(v).navigate(directions));
+        holder.binding.deleteGroup.setOnClickListener(v -> groupClickListener.onDelete(groupWithSummary.getGroup()));
+        holder.binding.editGroup.setOnClickListener(v -> groupClickListener.onEdit(groupWithSummary.getGroup()));
+        holder.binding.setGroup(groupWithSummary.getGroup());
+        holder.binding.setExpenseSum(groupWithSummary.getExpenseSum());
+        holder.binding.setPersonCount(groupWithSummary.getPersonCount());
         holder.binding.executePendingBindings();
     }
 
@@ -113,5 +110,10 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
             super(binding.getRoot());
             this.binding = binding;
         }
+    }
+
+    public interface GroupClickListener {
+        void onDelete(Group group);
+        void onEdit(Group group);
     }
 }

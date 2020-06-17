@@ -62,7 +62,7 @@
                     android:textColor="@{expenseWithPeopleInvolved.expense.description.equals(@string/payment) ? @color/colorPrimary : @color/black}"
                     android:layout_weight="3"
                     android:text="@{expenseWithPeopleInvolved.expense.description}"
-                    android:textAppearance="?attr/textAppearanceHeadline5"
+                    android:textAppearance="?attr/textAppearanceHeadline6"
                     tools:text="Bilety na koncert" />
 
                 <TextView
@@ -72,7 +72,7 @@
                     android:layout_weight="5"
                     android:text="@{@string/money_format(expenseWithPeopleInvolved.expense.amount)}"
                     android:textAlignment="textEnd"
-                    android:textAppearance="?attr/textAppearanceHeadline5"
+                    android:textAppearance="?attr/textAppearanceHeadline6"
                     tools:text="2222,22 zł" />
             </LinearLayout>
 
@@ -100,15 +100,18 @@
                     android:id="@+id/edit_expense"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+
                     visibleGone="@{!expenseWithPeopleInvolved.expense.description.equals(@string/payment)}"
                     android:layout_marginRight="@dimen/std_padding"
-                    android:background="@drawable/ic_edit" />
+                    android:src="@drawable/ic_edit" />
 
                 <ImageButton
                     android:id="@+id/delete_expense"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/ic_delete" />
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@drawable/ic_delete" />
             </LinearLayout>
 
 

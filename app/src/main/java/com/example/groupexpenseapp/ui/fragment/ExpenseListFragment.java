@@ -24,6 +24,7 @@ import com.example.groupexpenseapp.db.entity.ExpenseWithPeopleInvolved;
 import com.example.groupexpenseapp.ui.adapter.ExpenseAdapter;
 import com.example.groupexpenseapp.viewmodel.ExpenseListViewModel;
 import com.example.groupexpenseapp.viewmodel.factory.ExpenseListViewModelFactory;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
@@ -86,7 +87,11 @@ public class ExpenseListFragment extends Fragment {
         new AlertDialog.Builder(requireContext())
                 .setTitle("Usuń wydatek")
                 .setMessage("Czy na pewno chcesz usunąć ten wydatek? Tej operacji nie można cofnąć.")
-                .setPositiveButton("Usuń", (dialog, which) -> viewModel.deleteExpense(expense))
+                .setPositiveButton("Usuń", (dialog, which) -> {
+                    viewModel.deleteExpense(expense);
+                    Snackbar.make(requireView(), "Usunięto wydatek \"" + expense.getDescription() + "\"", Snackbar.LENGTH_SHORT)
+                            .show();
+                })
                 .setNegativeButton("Anuluj", null)
                 .show();
     }

@@ -30,6 +30,7 @@ import com.example.groupexpenseapp.db.entity.Group;
 import com.example.groupexpenseapp.db.entity.GroupWithSummary;
 import com.example.groupexpenseapp.ui.adapter.GroupAdapter;
 import com.example.groupexpenseapp.viewmodel.GroupListViewModel;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
@@ -53,9 +54,22 @@ public class GroupListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         viewModel = new ViewModelProvider(this).get(GroupListViewModel.class);
-        adapter = new GroupAdapter(group -> displayGroupDeleteWarningDialog(group.getGroup()));
+        adapter = new GroupAdapter(new GroupAdapter.GroupClickListener() {
+            @Override
+            public void onDelete(Group group) {
+                displayGroupDeleteWarningDialog(group);
+            }
 
-        binding.addGroupButton.setOnClickListener(v -> displayCreateGroupDialog());
+            @Override
+            public void onEdit(Group group) {
+                displayCreateOrEditGroupDialog(group);
+            }
+        });
+
+        binding.addGroupButton.setOnClickListener(v -> displayCreateOrEditGroupDialog(null));
+        binding.setLifecycleOwner(getViewLifecycleOwner());
+        binding.setViewmodel(viewModel);
+
 
         subscribeUi(viewModel.getAllGroupsWithSummary());
         binding.groups.setAdapter(adapter);
@@ -72,17 +86,21 @@ public class GroupListFragment extends Fragment {
         new AlertDialog.Builder(requireContext())
                 .setTitle("Usuń grupę")
                 .setMessage("Czy na pewno chcesz usunąć tę grupę? Tej operacji nie można cofnąć.")
-                .setPositiveButton("Usuń", (dialog, which) -> viewModel.deleteGroup(group))
+                .setPositiveButton("Usuń", (dialog, which) -> {
+                    viewModel.deleteGroup(group);
+                    Snackbar.make(requireView(), "Usunięto grupę \"" + group.getName() + "\"", Snackbar.LENGTH_SHORT)
+                            .show();
+                })
                 .setNegativeButton("Anuluj", null)
                 .show();
     }
 
-    private void displayCreateGroupDialog() {
+    private void displayCreateOrEditGroupDialog(Group group) {
         AddGroupDialogBinding binding = DataBindingUtil.inflate(getLayoutInflater(), R.layout.add_group_dialog, null, false);
         AlertDialog dialog = new AlertDialog.Builder(requireContext())
                 .setView(binding.getRoot())
-                .setTitle("Dodaj grupę")
-                .setPositiveButton("Dodaj", null)
+                .setTitle(group == null ? "Dodaj grupę" : "Edytuj grupę")
+                .setPositiveButton("Zapisz", null)
                 .setNegativeButton("Anuluj", null)
                 .create();
 
@@ -113,19 +131,30 @@ public class GroupListFragment extends Fragment {
                 }
             });
 
+            if (group != null) {
+                String name = group.getName();
+                input.setText(name);
+                input.setSelection(name.length());
+            }
+
             positiveButton.setOnClickListener(v -> {
                 String newGroupName = input.getText().toString().trim();
-                viewModel.addGroup(newGroupName).subscribe(groupId -> {
 
-                    hideKeyboard(input);
+                if (group == null) {
+                    viewModel.addGroup(newGroupName).subscribe(groupId -> {
 
-                    viewModel.addMeToGroup(groupId);
+                        viewModel.addMeToGroup(groupId);
 
-                    NavDirections directions = GroupListFragmentDirections
-                            .actionGroupListFragmentToGroupFragment(groupId);
-                    NavHostFragment.findNavController(this).navigate(directions);
-                }).dispose();
+                        NavDirections directions = GroupListFragmentDirections
+                                .actionGroupListFragmentToGroupFragment(groupId);
+                        NavHostFragment.findNavController(this).navigate(directions);
+                    }).dispose();
+                }
+                else {
+                    viewModel.updateGroup(group, newGroupName);
+                }
 
+                hideKeyboard(input);
                 d.dismiss();
             });
 
@@ -135,6 +164,7 @@ public class GroupListFragment extends Fragment {
             });
         });
 
+        dialog.setCanceledOnTouchOutside(false);
         dialog.show();
     }
 

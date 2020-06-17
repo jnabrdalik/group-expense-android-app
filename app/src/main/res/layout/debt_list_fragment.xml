@@ -9,7 +9,7 @@
             type="com.example.groupexpenseapp.viewmodel.DebtListViewModel" />
     </data>
 
-    <LinearLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.fragment.DebtListFragment"
@@ -23,16 +23,20 @@
             app:layoutManager="LinearLayoutManager" />
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
             android:padding="@dimen/std_padding"
             visibleGone="@{viewmodel.isExpenseListEmpty()}"
-            android:text="@string/debt_list_is_empty"
+            android:textAppearance="?attr/textAppearanceHeadline6"
+            android:text="@string/no_debts"
             android:layout_height="wrap_content"/>
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:textAppearance="?attr/textAppearanceHeadline6"
             android:padding="@dimen/std_padding"
             visibleGone="@{viewmodel.debts.size() == 0 &amp;&amp; !viewmodel.isExpenseListEmpty()}"
             android:text="@string/debts_settled"
             android:layout_height="wrap_content"/>
-    </LinearLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

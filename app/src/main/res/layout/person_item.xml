@@ -19,26 +19,30 @@
             android:id="@+id/person_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            tools:text="Andrzej"
-            android:textAppearance="?attr/textAppearanceHeadline5"
             android:layout_weight="3"
+            android:text="@{person.name}"
+            android:textAppearance="?attr/textAppearanceHeadline6"
             android:textColor="@{person.name.equals(@string/me) ? @color/colorPrimary : @color/black}"
-            android:text="@{person.name}"/>
+            tools:text="Andrzej" />
 
         <ImageButton
             android:id="@+id/edit_person"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             visibleGone="@{!person.name.equals(@string/me)}"
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/std_padding"
-            android:background="@drawable/ic_edit" />
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_edit" />
 
         <ImageButton
             android:id="@+id/delete_person"
+            visibleGone="@{!person.name.equals(@string/me)}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            visibleGone="@{!person.name.equals(@string/me)}"
-            android:background="@drawable/ic_delete" />
+
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_delete" />
 
 
     </LinearLayout>

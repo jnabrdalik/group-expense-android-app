@@ -45,12 +45,16 @@ public class GroupRepository {
         return groupDao.getGroup(groupId);
     }
 
-    public Single<Long> addGroup(Group group) {
+    public Single<Long> insertGroup(Group group) {
         return Single.fromFuture(
                 AppDatabase.executorService.submit(
                         () -> groupDao.insert(group)
                 )
         );
+    }
+
+    public void updateGroup(Group group) {
+        AppDatabase.executorService.execute(() -> groupDao.update(group));
     }
 
     public void deleteGroup(Group group) {
